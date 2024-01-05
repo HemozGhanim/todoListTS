@@ -16,23 +16,6 @@ const routes = [
         path: "/home",
         name: "mainView",
         component: mainView,
-        children: [
-          {
-            path: "/todo",
-            name: "todo",
-            component: todoListViewVue,
-          },
-          {
-            path: "/finished",
-            name: "finishedList",
-            component: finishedListviewView,
-          },
-          {
-            path: "/deleted",
-            name: "deletedList",
-            component: deletedListviewView,
-          },
-        ],
       },
     ],
   },

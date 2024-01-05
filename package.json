@@ -13,10 +13,13 @@
     "pinia": "^2.1.7",
     "vue": "^3.3.11",
     "vue-router": "^4.2.5",
-    "vuetify": "^3.4.7"
+    "vue3-transitions": "^1.0.0",
+    "vuetify": "^3.4.7",
+    "webfontloader": "^1.6.28"
   },
   "devDependencies": {
     "@mdi/font": "^7.3.67",
+    "@types/webfontloader": "^1.6.38",
     "@vitejs/plugin-vue": "^4.5.2",
     "typescript": "^5.2.2",
     "vite": "^5.0.8",
