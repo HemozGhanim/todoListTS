@@ -1,7 +1,6 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import axios from "axios";
-import { el } from "vuetify/locale";
 
 interface task_body {
   id?: string;
@@ -100,7 +99,7 @@ export const useTasksStore = defineStore("tasks", () => {
           task_Name: task.task_Name,
           status: "created",
         })
-        .then(function (response) {
+        .then(function () {
           getTasks();
         })
         .catch(function (error) {
@@ -108,30 +107,6 @@ export const useTasksStore = defineStore("tasks", () => {
         });
       ifItemIncluded.value = false;
     }
-    // createdTasks.value.forEach((element) => {
-    //   // const isIncreatedtasksArrayTaskName = createdTasks.value.find(
-    //   //   (item) => item.task_Name === task.task_Name
-    //   // );
-    //   // console.log(isIncreatedtasksArrayTaskName?.task_Name);
-    //   // if (isIncreatedtasksArrayTaskName.includes(element.task_Name)) {
-    //   //   ifItemIncluded.value = true;
-    //   // } else {
-    //   //   axios
-    //   //     .post("https://todots-57c6a-default-rtdb.firebaseio.com/task.json", {
-    //   //       id: task.id,
-    //   //       task_Name: task.task_Name,
-    //   //       status: "created",
-    //   //     })
-    //   //     .then(function (response) {
-    //   //       getTasks();
-    //   //       console.log(response);
-    //   //     })
-    //   //     .catch(function (error) {
-    //   //       console.log(error);
-    //   //     });
-    //   //   ifItemIncluded.value = false;
-    //   // }
-    // });
   }
 
   function DeleteTask(id: any, task: task_body) {
@@ -183,7 +158,7 @@ export const useTasksStore = defineStore("tasks", () => {
         task_Name: task.task_Name,
         status: "created",
       })
-      .then(function (response) {
+      .then(function () {
         const getIndex = deletedTasks.value.findIndex((item) => item.id === id);
         deletedTasks.value.splice(getIndex, 1);
         if (createdTasks.value.some((el) => el.task_Name === task.task_Name)) {
@@ -216,7 +191,7 @@ export const useTasksStore = defineStore("tasks", () => {
         task_Name: task.task_Name,
         status: "created",
       })
-      .then(function (response) {
+      .then(function () {
         const getIndex = finishedTasks.value.findIndex(
           (item) => item.id === id
         );
@@ -281,36 +256,3 @@ export const useTasksStore = defineStore("tasks", () => {
     editTask,
   };
 });
-
-// function getPushedTask() {
-//   axios
-//     .get("https://todots-57c6a-default-rtdb.firebaseio.com/task.json")
-//     .then(function (response) {
-//       const data = response.data;
-//       const newdata = [];
-//       for (let key in data) {
-//         const task = data[key];
-//         task.id = key;
-//         newdata.push(task);
-//       }
-//       const isIntasksArray = createdTasks.value.map((item) => item.id); // this is first Array to extract id values
-//       const Xarray = newdata.filter(
-//         (item) => !isIntasksArray.includes(item.id) //to filter those items by "id" if it not exect in fist Array
-//       );
-//       createdTasks.value.push(...Xarray); // to push a new item in filtered Array to the first Array
-//     })
-//     .catch(function (error) {
-//       console.log(error);
-//     });
-// }
-
-// function pushDeletedItems(task: task_body) {
-//   axios
-//     .post("https://todots-57c6a-default-rtdb.firebaseio.com/task.json", task)
-//     .then(function (response) {
-//       console.log(response);
-//     })
-//     .catch(function (error) {
-//       console.log(error);
-//     });
-// }
