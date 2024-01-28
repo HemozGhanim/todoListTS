@@ -2,7 +2,6 @@
 import { onUpdated, ref } from "vue";
 import { useTasksStore } from "../store/todoStore";
 import { SlideInOut } from "vue3-transitions";
-
 //store declare
 const store = useTasksStore();
 
@@ -17,7 +16,6 @@ interface editObj {
 let task_Name: string = "";
 let vTextModel: string = "";
 const isEditing = ref(false);
-let errorMessages = ref("This Item exist Already");
 
 //functions to change edidting Value
 const EditingObj = ref<editObj>({
@@ -34,6 +32,12 @@ function putEditName(el: any) {
   vTextModel = el;
 }
 
+function ShowMessage() {
+  setTimeout(() => {
+    store.ifItemIncluded = false;
+  }, 500);
+}
+
 onUpdated(() => {
   useTasksStore();
 });
@@ -46,7 +50,7 @@ onUpdated(() => {
     class="d-flex align-center justify-center flex-nowrap"
   >
     <v-container class="d-flex align-center justify-center flex-nowrap pa-4">
-      <v-card
+      <!-- <v-card
         elevation="0"
         min-width="25%"
         rounded="xl"
@@ -54,7 +58,7 @@ onUpdated(() => {
       >
         <v-card-title class="w-100 text-center"> days </v-card-title>
         <v-card-item class="w-100 text-center">2/4/5/2022</v-card-item>
-      </v-card>
+      </v-card> -->
       <v-card
         elevation="5"
         color="#384152"
@@ -85,7 +89,9 @@ onUpdated(() => {
                 density="compact"
                 size="x-large"
                 color="orange-darken-3"
-                @click="store.pushTasks({ task_Name }), (task_Name = '')"
+                @click="
+                  store.pushTasks({ task_Name }), (task_Name = ''), ShowMessage
+                "
               ></v-btn>
             </v-col>
             <SlideInOut
@@ -97,10 +103,11 @@ onUpdated(() => {
               class="w-100"
               moveClass="group-move-enter"
               leaveActiveClass="group-move-leave"
+              mode="SlideInOut"
             >
               <v-col v-if="store.ifItemIncluded" class="text-center">
                 <span class="my-2 px-1 mx-2 text-red text-h6">{{
-                  errorMessages
+                  store.ExistMessage
                 }}</span>
               </v-col>
             </SlideInOut>
@@ -210,7 +217,7 @@ onUpdated(() => {
           </v-container>
         </v-card-item>
       </v-card>
-      <v-card
+      <!-- <v-card
         elevation="5"
         color="#384152"
         min-width="25%"
@@ -219,7 +226,20 @@ onUpdated(() => {
       >
         <v-card-title> days </v-card-title>
         <v-card-item>2/4/5/2022</v-card-item>
-      </v-card>
+      </v-card> -->
     </v-container>
   </v-sheet>
 </template>
+<style scoped>
+.fade-slide-enter-active,
+.fade-slide-leave-active {
+  transition: opacity 2s ease, transform 1s ease-in-out;
+  transform: translateY(0px);
+}
+
+.fade-slide-enter-from,
+.fade-slide-leave-to {
+  opacity: 0;
+  transform: translateY(100px);
+}
+</style>

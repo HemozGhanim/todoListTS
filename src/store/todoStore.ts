@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import axios from "axios";
+import { el } from "vuetify/locale";
 
 interface task_body {
   id?: string;
@@ -12,9 +13,9 @@ export const useTasksStore = defineStore("tasks", () => {
   let deletedTasks = ref<Array<task_body>>([]);
   let finishedTasks = ref<Array<task_body>>([]);
   let ifItemIncluded = ref<boolean>();
-
+  let ExistMessage = ref<string>();
+  let setTimeOutMessage = ref<number>();
   //Get tasks function
-
   function getTasks() {
     axios
       .get("https://todots-57c6a-default-rtdb.firebaseio.com/task.json")
@@ -27,7 +28,6 @@ export const useTasksStore = defineStore("tasks", () => {
           allTasks.value.push(task);
         }
         allTasks.value.forEach((element) => {
-          console.log(element.status === "created");
           if (element.status === "created") {
             // Extracting existing IDs from the first Array
             const isIncreatedtasksArray = createdTasks.value.map(
@@ -89,30 +89,49 @@ export const useTasksStore = defineStore("tasks", () => {
   getTasks();
 
   function pushTasks(task: task_body) {
-    createdTasks.value.forEach((element) => {
-      const isIncreatedtasksArrayTaskName = createdTasks.value.map(
-        (item) => item.task_Name
-      );
-      console.log(isIncreatedtasksArrayTaskName.indexOf(element.task_Name));
-      if (isIncreatedtasksArrayTaskName.includes(element.task_Name)) {
-        ifItemIncluded.value = true;
-      } else {
-        axios
-          .post("https://todots-57c6a-default-rtdb.firebaseio.com/task.json", {
-            id: task.id,
-            task_Name: task.task_Name,
-            status: "created",
-          })
-          .then(function (response) {
-            getTasks();
-            console.log(response);
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
-        ifItemIncluded.value = false;
-      }
-    });
+    if (createdTasks.value.some((el) => el.task_Name === task.task_Name)) {
+      ifItemIncluded.value = true;
+      setTimeOutMessage.value = 1;
+      ExistMessage.value = "Task is Already Added";
+    } else {
+      axios
+        .post("https://todots-57c6a-default-rtdb.firebaseio.com/task.json", {
+          id: task.id,
+          task_Name: task.task_Name,
+          status: "created",
+        })
+        .then(function (response) {
+          getTasks();
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+      ifItemIncluded.value = false;
+    }
+    // createdTasks.value.forEach((element) => {
+    //   // const isIncreatedtasksArrayTaskName = createdTasks.value.find(
+    //   //   (item) => item.task_Name === task.task_Name
+    //   // );
+    //   // console.log(isIncreatedtasksArrayTaskName?.task_Name);
+    //   // if (isIncreatedtasksArrayTaskName.includes(element.task_Name)) {
+    //   //   ifItemIncluded.value = true;
+    //   // } else {
+    //   //   axios
+    //   //     .post("https://todots-57c6a-default-rtdb.firebaseio.com/task.json", {
+    //   //       id: task.id,
+    //   //       task_Name: task.task_Name,
+    //   //       status: "created",
+    //   //     })
+    //   //     .then(function (response) {
+    //   //       getTasks();
+    //   //       console.log(response);
+    //   //     })
+    //   //     .catch(function (error) {
+    //   //       console.log(error);
+    //   //     });
+    //   //   ifItemIncluded.value = false;
+    //   // }
+    // });
   }
 
   function DeleteTask(id: any, task: task_body) {
@@ -167,11 +186,16 @@ export const useTasksStore = defineStore("tasks", () => {
       .then(function (response) {
         const getIndex = deletedTasks.value.findIndex((item) => item.id === id);
         deletedTasks.value.splice(getIndex, 1);
-        pushTasks({
-          task_Name: task.task_Name,
-          status: "created",
-        });
-        console.log(response);
+        if (createdTasks.value.some((el) => el.task_Name === task.task_Name)) {
+          ifItemIncluded.value = true;
+          setTimeOutMessage.value = 1;
+          ExistMessage.value = "Deleted Task is Already here";
+        } else {
+          createdTasks.value.push({
+            task_Name: task.task_Name,
+            status: "created",
+          });
+        }
       });
   }
   function perDeleteTask(id: any) {
@@ -197,11 +221,16 @@ export const useTasksStore = defineStore("tasks", () => {
           (item) => item.id === id
         );
         finishedTasks.value.splice(getIndex, 1);
-        pushTasks({
-          task_Name: task.task_Name,
-          status: "created",
-        });
-        console.log(response);
+        if (createdTasks.value.some((el) => el.task_Name === task.task_Name)) {
+          ifItemIncluded.value = true;
+          setTimeOutMessage.value = 1;
+          ExistMessage.value = "Finished Task is Already here";
+        } else {
+          createdTasks.value.push({
+            task_Name: task.task_Name,
+            status: "created",
+          });
+        }
       });
   }
   function permanentDeleteFinishedTask(id: any) {
@@ -240,6 +269,8 @@ export const useTasksStore = defineStore("tasks", () => {
     deletedTasks,
     finishedTasks,
     ifItemIncluded,
+    ExistMessage,
+    setTimeOutMessage,
     pushTasks,
     DeleteTask,
     finishedTask,

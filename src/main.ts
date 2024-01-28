@@ -6,7 +6,7 @@ import Vue3Transitions from "vue3-transitions";
 import "./style.css";
 const pinia = createPinia();
 import App from "./App.vue";
-import { loadFonts } from "./plugins/fontLoader";
+import "animate.css";
 const app = createApp(App);
 app.use(Vue3Transitions);
 app.use(pinia);
