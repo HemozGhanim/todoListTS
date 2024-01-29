@@ -42,7 +42,7 @@ const router = createRouter({
 
 router.beforeEach((to, _from, next) => {
   if (to.meta.requiresAuth) {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("jwToken");
     if (token) {
       next();
     } else {

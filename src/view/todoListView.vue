@@ -103,7 +103,6 @@ onUpdated(() => {
               class="w-100"
               moveClass="group-move-enter"
               leaveActiveClass="group-move-leave"
-              mode="SlideInOut"
             >
               <v-col v-if="store.ifItemIncluded" class="text-center">
                 <span class="my-2 px-1 mx-2 text-red text-h6">{{
