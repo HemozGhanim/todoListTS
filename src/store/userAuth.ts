@@ -28,7 +28,7 @@ export const userAuthStore = defineStore("Users", () => {
         localStorage.setItem("jwToken", data.idToken);
         heISIn.value = false;
         InValied.value = false;
-        router.push("/home");
+        router.push("/");
       })
       .catch(function (error) {
         InValied.value = true;
