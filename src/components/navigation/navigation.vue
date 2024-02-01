@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { userAuthStore } from "../../store/userAuth";
-import LogoSmallPhoto from "../../assets/logoGeekBox-small.png";
+import LogoSmallPhoto from "../../assets/logoGeekBox-Small.png";
 import DrawerNav from "./drawer.vue";
 const Store = userAuthStore();
+// function coverUri() {
+//   return "../../assets/logoGeekBox-Small.png";
+// }
 </script>
 <template>
   <v-app-bar
