@@ -118,7 +118,7 @@ function toggleView() {
                 class="mb-8 mt-4 bg-MainColor text-white"
                 size="large"
                 @click="IsLoad()"
-                to="/home"
+                to="/todo"
                 :loading="loading"
               >
                 Create Account
@@ -211,7 +211,7 @@ function toggleView() {
                       password: password,
                     })
                 "
-                to="/home"
+                to="/todo"
                 :loading="loading"
               >
                 Log In

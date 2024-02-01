@@ -13,13 +13,13 @@ const routes = [
     path: "/",
     name: "app",
     component: mainLayoutView,
-    redirect: "/home",
+    redirect: "/todo",
     meta: {
       requiresAuth: true,
     },
     children: [
       {
-        path: "/home",
+        path: "/todo",
         name: "mainView",
         component: mainView,
       },

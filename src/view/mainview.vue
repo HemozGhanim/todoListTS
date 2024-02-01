@@ -7,7 +7,12 @@ let tab = ref();
 </script>
 <template>
   <div>
-    <v-tabs v-model="tab" color="deep-purple-accent-4" align-tabs="center">
+    <v-tabs
+      v-model="tab"
+      color="pink-accent-3"
+      align-tabs="center"
+      bg-color="grey-darken-4"
+    >
       <v-tab value="todo" class="font-weight-bold">todo</v-tab>
       <v-tab value="finished" class="font-weight-bold">finished</v-tab>
       <v-tab value="deleted" class="font-weight-bold">deleted</v-tab>

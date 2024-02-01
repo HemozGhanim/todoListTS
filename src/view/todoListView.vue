@@ -49,16 +49,40 @@ onUpdated(() => {
     height="100%"
     class="d-flex align-center justify-center flex-nowrap"
   >
-    <v-container class="d-flex align-center justify-center flex-nowrap pa-4">
-      <!-- <v-card
-        elevation="0"
-        min-width="25%"
-        rounded="xl"
-        class="d-flex justify-center align-center flex-wrap pa-3 mx-4"
-      >
-        <v-card-title class="w-100 text-center"> days </v-card-title>
-        <v-card-item class="w-100 text-center">2/4/5/2022</v-card-item>
-      </v-card> -->
+    <v-container class="pa-4">
+      <!-- <v-row>
+        <v-col cols="12" class="px-1 mx-2 d-flex justify-end align-center">
+          <v-btn
+            append-icon="mdi-plus"
+            color="pink"
+            @click="
+              store.pushTasks({ task_Name }), (task_Name = ''), ShowMessage
+            "
+          >
+            Add List
+          </v-btn>
+        </v-col>
+
+        <v-col cols="3 my-2">
+          <v-card
+            elevation="5"
+            color="#384152"
+            min-width="50%"
+            rounded="l"
+            class="pa-2"
+          >
+            <v-card-title
+              class="text-grey-lighten-2 font-weight-medium text-subtitle-1 w-100 text-center"
+            >
+              Task List
+            </v-card-title>
+          </v-card>
+        </v-col>
+        <v-col cols="3 my-2"> HH </v-col>
+        <v-col cols="3 my-2"> HH </v-col>
+        <v-col cols="3 my-2"> HH </v-col>
+        <v-col cols="3 my-2"> HH </v-col>
+      </v-row> -->
       <v-card
         elevation="5"
         color="#384152"
@@ -216,16 +240,6 @@ onUpdated(() => {
           </v-container>
         </v-card-item>
       </v-card>
-      <!-- <v-card
-        elevation="5"
-        color="#384152"
-        min-width="25%"
-        rounded="xl"
-        class="d-block pa-3 mx-4"
-      >
-        <v-card-title> days </v-card-title>
-        <v-card-item>2/4/5/2022</v-card-item>
-      </v-card> -->
     </v-container>
   </v-sheet>
 </template>
