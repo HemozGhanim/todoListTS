@@ -41,6 +41,11 @@ function ShowMessage() {
 onUpdated(() => {
   useTasksStore();
 });
+
+function Testhere() {
+  console.log("test");
+}
+Testhere();
 </script>
 
 <template>
