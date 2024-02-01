@@ -43,7 +43,7 @@ onUpdated(() => {
 });
 
 function Testhere() {
-  console.log("test");
+  console.log("test here");
 }
 Testhere();
 </script>
