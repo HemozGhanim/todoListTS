@@ -2,7 +2,7 @@
 import LogoPhoto from "../assets/logoGeekBox.svg";
 import LogoSmallPhoto from "../assets/logoGeekBox.png";
 import { userAuthStore } from "../store/userAuth";
-import { reactive, ref } from "vue";
+import { computed, reactive, ref } from "vue";
 
 const userStore = userAuthStore();
 
@@ -14,6 +14,7 @@ let signUpRePassword = ref("");
 let loading = ref(false);
 let form = ref(false);
 let showPass = ref(false);
+let showPass2 = ref(false);
 
 const rules = reactive({
   required: (value: any) => !!value || "Field is required",
@@ -23,12 +24,37 @@ const rules = reactive({
     return pattern.test(value) || "Invalid e-mail.";
   },
   min: (v: string) => v.length >= 8 || "Min 8 characters",
+  passwordMatch: (v: string) =>
+    v === signUpPassword.value || "Password not match",
 });
 
 let SignUpView = ref(false);
+// function onChangeValue() {
+//   if (rules.passwordMatch(signUpRePassword.value) == true) {
+//     form.value = true;
+//     unable.value = false;
+//   } else {
+//     unable.value = true;
+//   }
+// }
+const IsPasswordMatch = computed(() => {
+  if (signUpPassword.value.length > 0 && signUpRePassword.value.length > 0) {
+    return signUpRePassword.value === signUpPassword.value;
+  } else {
+    return false;
+  }
+});
+
+function signUp(_newEmail: string, _newPass: string) {
+  if (form.value == true) {
+    userStore.signUpUser({
+      email: _newEmail,
+      password: _newPass,
+    });
+  }
+}
 function IsLoad() {
   loading.value = true;
-
   if (userStore.heISIn === true) {
     setTimeout(() => {
       loading.value = false;
@@ -82,7 +108,7 @@ function toggleView() {
           <v-card-title>signUp</v-card-title>
           <v-spacer></v-spacer>
           <v-card-item>
-            <form>
+            <v-form v-model="form">
               <v-text-field
                 bg-color="white"
                 required
@@ -91,49 +117,61 @@ function toggleView() {
                 placeholder="johndoe@gmail.com"
                 type="email"
                 variant="solo"
+                :rules="[rules.required, rules.email]"
                 v-model="signUpEmail"
+                rounded
               ></v-text-field>
               <v-text-field
+                :append-inner-icon="showPass2 ? 'mdi-eye' : 'mdi-eye-off'"
+                @click:append-inner="showPass2 = !showPass2"
                 bg-color="white"
                 required
                 clearable
                 label="Password"
                 hint="Enter your password to access this website"
-                type="input"
+                :type="showPass2 ? 'text' : 'password'"
                 variant="solo"
+                :rules="[rules.required, rules.min]"
                 v-model="signUpPassword"
+                rounded
               ></v-text-field>
               <v-text-field
+                :append-inner-icon="showPass ? 'mdi-eye' : 'mdi-eye-off'"
+                @click:append-inner="showPass = !showPass"
                 bg-color="white"
                 required
                 clearable
                 label="Re Password"
                 hint="Re Enter your password to access this website"
-                type="input"
+                :type="showPass ? 'text' : 'password'"
                 variant="solo"
+                :rules="[rules.required, rules.passwordMatch]"
                 v-model="signUpRePassword"
+                rounded
               ></v-text-field>
+            </v-form>
+            <v-btn
+              block
+              rounded
+              class="mb-8 mt-4 bg-MainColor text-white"
+              size="large"
+              @click="IsLoad(), signUp(signUpEmail, signUpPassword)"
+              to="/todo"
+              :loading="loading"
+              :disabled="!IsPasswordMatch"
+            >
+              Create Account
+            </v-btn>
+            <v-card-text class="text-center">
               <v-btn
-                block
-                class="mb-8 mt-4 bg-MainColor text-white"
-                size="large"
-                @click="IsLoad()"
-                to="/todo"
-                :loading="loading"
+                class="MainColor text-decoration-none text-h6"
+                variant="text"
+                @click="toggleView"
               >
-                Create Account
+                I Have Account Already
+                <v-icon icon="mdi-chevron-right"></v-icon>
               </v-btn>
-              <v-card-text class="text-center">
-                <v-btn
-                  class="MainColor text-decoration-none text-h6"
-                  variant="text"
-                  @click="toggleView"
-                >
-                  I Have Account Already
-                  <v-icon icon="mdi-chevron-right"></v-icon>
-                </v-btn>
-              </v-card-text>
-            </form>
+            </v-card-text>
           </v-card-item>
         </v-card>
       </v-col>
@@ -160,12 +198,6 @@ function toggleView() {
           elevation="0"
           class="my-auto d-block"
         >
-          <p
-            v-if="userStore.InValied"
-            class="text-center w-100 font-weight-medium bg-red py-2 rounded-lg text-subtitle-1"
-          >
-            {{ userStore.signInErrorMessage }}
-          </p>
           <v-card-title>Login</v-card-title>
           <v-spacer></v-spacer>
           <v-card-item>
@@ -185,6 +217,7 @@ function toggleView() {
               ></v-text-field>
               <v-text-field
                 :append-inner-icon="showPass ? 'mdi-eye' : 'mdi-eye-off'"
+                @click:append-inner="showPass = !showPass"
                 bg-color="white"
                 required
                 clearable
@@ -192,10 +225,9 @@ function toggleView() {
                 :rules="[rules.required, rules.min]"
                 hint="Enter your password to access this website"
                 :type="showPass ? 'text' : 'password'"
-                @click:append-inner="showPass = !showPass"
                 variant="solo"
-                v-model="password"
                 rounded
+                v-model="password"
                 class="rounded-xl"
                 density="comfortable"
               ></v-text-field>
@@ -229,6 +261,9 @@ function toggleView() {
           </v-card-item>
         </v-card>
       </v-col>
+      <v-snackbar v-model="userStore.snackbar" :color="userStore.snackBarColor">
+        <p class="text-center text-subtitle-1">{{ userStore.snackBarText }}</p>
+      </v-snackbar>
     </v-row>
   </v-sheet>
 </template>

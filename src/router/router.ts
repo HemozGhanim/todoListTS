@@ -3,6 +3,8 @@ import mainLayoutView from "../layout/mainLayout.vue";
 import notFoundviewView from "../view/notFoundview.vue";
 import mainView from "../view/mainview.vue";
 import loginviewVue from "../view/loginview.vue";
+import { useCookies } from "vue3-cookies";
+
 const routes = [
   {
     path: "/login",
@@ -41,8 +43,10 @@ const router = createRouter({
 });
 
 router.beforeEach((to, _from, next) => {
+  const $cookies = useCookies().cookies;
+
   if (to.meta.requiresAuth) {
-    const token = localStorage.getItem("jwToken");
+    const token = $cookies.get("jwToken");
     if (token) {
       next();
     } else {

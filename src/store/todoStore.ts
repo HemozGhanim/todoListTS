@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import axios from "axios";
+import { useCookies } from "vue3-cookies";
 
 interface task_body {
   id?: string;
@@ -14,10 +15,18 @@ export const useTasksStore = defineStore("tasks", () => {
   let ifItemIncluded = ref<boolean>();
   let ExistMessage = ref<string>();
   let setTimeOutMessage = ref<number>();
+  const $cookies = useCookies().cookies;
+
   //Get tasks function
   function getTasks() {
-    axios
-      .get("https://todots-57c6a-default-rtdb.firebaseio.com/task.json")
+    const config = {
+      method: "get",
+      baseURL: import.meta.env.VITE_APP_API_URL,
+      url: `/users/${$cookies.get("uid")}/tasks.json?auth=${$cookies.get(
+        "jwToken"
+      )}`,
+    };
+    axios(config)
       .then(function (response) {
         const data = response.data;
         const allTasks = ref<Array<task_body>>([]);
@@ -93,12 +102,23 @@ export const useTasksStore = defineStore("tasks", () => {
       setTimeOutMessage.value = 1;
       ExistMessage.value = "Task is Already Added";
     } else {
-      axios
-        .post("https://todots-57c6a-default-rtdb.firebaseio.com/task.json", {
-          id: task.id,
-          task_Name: task.task_Name,
-          status: "created",
-        })
+      const data = JSON.stringify({
+        id: task.id,
+        task_Name: task.task_Name,
+        status: "created",
+      });
+      const config = {
+        method: "post",
+        baseURL: import.meta.env.VITE_APP_API_URL,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        url: `/users/${$cookies.get("uid")}/tasks.json?auth=${$cookies.get(
+          "jwToken"
+        )}`,
+        data: data,
+      };
+      axios(config)
         .then(function () {
           getTasks();
         })
@@ -110,14 +130,24 @@ export const useTasksStore = defineStore("tasks", () => {
   }
 
   function DeleteTask(id: any, task: task_body) {
-    axios
-      .put(`https://todots-57c6a-default-rtdb.firebaseio.com/task/${id}.json`, {
-        id: task.id,
-        task_Name: task.task_Name,
-        status: "deleted",
-      })
+    const data = JSON.stringify({
+      id: task.id,
+      task_Name: task.task_Name,
+      status: "deleted",
+    });
+    const config = {
+      method: "put",
+      baseURL: import.meta.env.VITE_APP_API_URL,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      url: `/users/${$cookies.get("uid")}/tasks/${id}.json?auth=${$cookies.get(
+        "jwToken"
+      )}`,
+      data: data,
+    };
+    axios(config)
       .then((Response) => {
-        console.log(Response);
         const objIndex = createdTasks.value.findIndex((item) => item.id === id);
         createdTasks.value.splice(objIndex, 1);
         deletedTasks.value.push({
@@ -131,14 +161,24 @@ export const useTasksStore = defineStore("tasks", () => {
       });
   }
   function finishedTask(id: any, task: task_body) {
-    axios
-      .put(`https://todots-57c6a-default-rtdb.firebaseio.com/task/${id}.json`, {
-        id: task.id,
-        task_Name: task.task_Name,
-        status: "finished",
-      })
+    const data = JSON.stringify({
+      id: task.id,
+      task_Name: task.task_Name,
+      status: "finished",
+    });
+    const config = {
+      method: "put",
+      baseURL: import.meta.env.VITE_APP_API_URL,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      url: `/users/${$cookies.get("uid")}/tasks/${id}.json?auth=${$cookies.get(
+        "jwToken"
+      )}`,
+      data: data,
+    };
+    axios(config)
       .then((Response) => {
-        console.log(Response);
         const objIndex = createdTasks.value.findIndex((item) => item.id === id);
         createdTasks.value.splice(objIndex, 1);
         finishedTasks.value.push({
@@ -152,92 +192,123 @@ export const useTasksStore = defineStore("tasks", () => {
       });
   }
   function UnDeleteTask(id: any, task: task_body) {
-    axios
-      .put(`https://todots-57c6a-default-rtdb.firebaseio.com/task/${id}.json`, {
-        id: task.id,
-        task_Name: task.task_Name,
-        status: "created",
-      })
-      .then(function () {
-        const getIndex = deletedTasks.value.findIndex((item) => item.id === id);
-        deletedTasks.value.splice(getIndex, 1);
-        if (createdTasks.value.some((el) => el.task_Name === task.task_Name)) {
-          ifItemIncluded.value = true;
-          setTimeOutMessage.value = 1;
-          ExistMessage.value = "Deleted Task is Already here";
-        } else {
-          createdTasks.value.push({
-            task_Name: task.task_Name,
-            status: "created",
-          });
-        }
-      });
-  }
-  function perDeleteTask(id: any) {
-    axios
-      .delete(
-        `https://todots-57c6a-default-rtdb.firebaseio.com/task/${id}.json`
-      )
-      .then(function (response) {
-        const getIndex = deletedTasks.value.findIndex((item) => item.id === id);
-        deletedTasks.value.splice(getIndex, 1);
-        console.log(response);
-      });
-  }
-  function unfinishedTask(id: any, task: task_body) {
-    axios
-      .put(`https://todots-57c6a-default-rtdb.firebaseio.com/task/${id}.json`, {
-        id: task.id,
-        task_Name: task.task_Name,
-        status: "created",
-      })
-      .then(function () {
-        const getIndex = finishedTasks.value.findIndex(
-          (item) => item.id === id
-        );
-        finishedTasks.value.splice(getIndex, 1);
-        if (createdTasks.value.some((el) => el.task_Name === task.task_Name)) {
-          ifItemIncluded.value = true;
-          setTimeOutMessage.value = 1;
-          ExistMessage.value = "Finished Task is Already here";
-        } else {
-          createdTasks.value.push({
-            task_Name: task.task_Name,
-            status: "created",
-          });
-        }
-      });
-  }
-  function permanentDeleteFinishedTask(id: any) {
-    axios
-      .delete(
-        `https://todots-57c6a-default-rtdb.firebaseio.com/task/${id}.json`
-      )
-      .then(function (response) {
-        const getIndex = finishedTasks.value.findIndex(
-          (item) => item.id === id
-        );
-        finishedTasks.value.splice(getIndex, 1);
-        console.log(response);
-      });
-  }
-  function editTask(task: task_body) {
-    axios
-      .put(
-        `https://todots-57c6a-default-rtdb.firebaseio.com/task/${task.id}.json`,
-        {
-          id: task.id,
+    const data = JSON.stringify({
+      id: task.id,
+      task_Name: task.task_Name,
+      status: "created",
+    });
+    const config = {
+      method: "put",
+      baseURL: import.meta.env.VITE_APP_API_URL,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      url: `/users/${$cookies.get("uid")}/tasks/${id}.json?auth=${$cookies.get(
+        "jwToken"
+      )}`,
+      data: data,
+    };
+    axios(config).then(function () {
+      const getIndex = deletedTasks.value.findIndex((item) => item.id === id);
+      deletedTasks.value.splice(getIndex, 1);
+      if (createdTasks.value.some((el) => el.task_Name === task.task_Name)) {
+        ifItemIncluded.value = true;
+        setTimeOutMessage.value = 1;
+        ExistMessage.value = "Deleted Task is Already here";
+      } else {
+        createdTasks.value.push({
           task_Name: task.task_Name,
           status: "created",
-        }
-      )
-      .then(function (response) {
-        const getIndex = createdTasks.value.findIndex(
-          (item) => item.id === task.id
-        );
-        createdTasks.value.splice(getIndex, 1, task);
-        console.log(response);
-      });
+        });
+      }
+    });
+  }
+  function perDeleteTask(id: any) {
+    const config = {
+      method: "delete",
+      baseURL: import.meta.env.VITE_APP_API_URL,
+      url: `/users/${$cookies.get("uid")}/tasks/${id}.json?auth=${$cookies.get(
+        "jwToken"
+      )}`,
+    };
+    axios(config).then(function (response) {
+      const getIndex = deletedTasks.value.findIndex((item) => item.id === id);
+      deletedTasks.value.splice(getIndex, 1);
+    });
+  }
+  function unfinishedTask(id: any, task: task_body) {
+    const data = JSON.stringify({
+      id: task.id,
+      task_Name: task.task_Name,
+      status: "created",
+    });
+    const config = {
+      method: "put",
+      baseURL: import.meta.env.VITE_APP_API_URL,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      url: `/users/${$cookies.get("uid")}/tasks/${id}.json?auth=${$cookies.get(
+        "jwToken"
+      )}`,
+      data: data,
+    };
+    axios(config).then(function () {
+      const getIndex = finishedTasks.value.findIndex((item) => item.id === id);
+      finishedTasks.value.splice(getIndex, 1);
+      if (createdTasks.value.some((el) => el.task_Name === task.task_Name)) {
+        ifItemIncluded.value = true;
+        setTimeOutMessage.value = 1;
+        ExistMessage.value = "Finished Task is Already here";
+      } else {
+        createdTasks.value.push({
+          task_Name: task.task_Name,
+          status: "created",
+        });
+      }
+    });
+  }
+  function permanentDeleteFinishedTask(id: any) {
+    const config = {
+      method: "delete",
+      baseURL: import.meta.env.VITE_APP_API_URL,
+      url: `/users/${$cookies.get("uid")}/tasks/${id}.json?auth=${$cookies.get(
+        "jwToken"
+      )}`,
+    };
+    axios(config).then(function (response) {
+      const getIndex = finishedTasks.value.findIndex((item) => item.id === id);
+      finishedTasks.value.splice(getIndex, 1);
+    });
+  }
+  function editTask(task: task_body) {
+    const data = JSON.stringify({
+      id: task.id,
+      task_Name: task.task_Name,
+      status: "created",
+    });
+    const config = {
+      method: "put",
+      baseURL: import.meta.env.VITE_APP_API_URL,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      url: `/users/${$cookies.get("uid")}/tasks/${
+        task.id
+      }.json?auth=${$cookies.get("jwToken")}`,
+      data: data,
+    };
+    axios(config).then(function (response) {
+      const getIndex = createdTasks.value.findIndex(
+        (item) => item.id === task.id
+      );
+      createdTasks.value.splice(getIndex, 1, task);
+    });
+  }
+  function resetAllData() {
+    createdTasks.value = [];
+    finishedTasks.value = [];
+    deletedTasks.value = [];
   }
   return {
     createdTasks,
@@ -254,5 +325,7 @@ export const useTasksStore = defineStore("tasks", () => {
     unfinishedTask,
     permanentDeleteFinishedTask,
     editTask,
+    resetAllData,
+    getTasks,
   };
 });
