@@ -9,6 +9,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@sentry/vite-plugin": "^2.14.1",
+    "@sentry/vue": "^7.101.1",
     "animate.css": "^4.1.1",
     "axios": "^1.6.2",
     "pinia": "^2.1.7",

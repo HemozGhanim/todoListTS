@@ -147,7 +147,7 @@ export const useTasksStore = defineStore("tasks", () => {
       data: data,
     };
     axios(config)
-      .then((Response) => {
+      .then(() => {
         const objIndex = createdTasks.value.findIndex((item) => item.id === id);
         createdTasks.value.splice(objIndex, 1);
         deletedTasks.value.push({
@@ -178,7 +178,7 @@ export const useTasksStore = defineStore("tasks", () => {
       data: data,
     };
     axios(config)
-      .then((Response) => {
+      .then(() => {
         const objIndex = createdTasks.value.findIndex((item) => item.id === id);
         createdTasks.value.splice(objIndex, 1);
         finishedTasks.value.push({
@@ -231,7 +231,7 @@ export const useTasksStore = defineStore("tasks", () => {
         "jwToken"
       )}`,
     };
-    axios(config).then(function (response) {
+    axios(config).then(function () {
       const getIndex = deletedTasks.value.findIndex((item) => item.id === id);
       deletedTasks.value.splice(getIndex, 1);
     });
@@ -276,7 +276,7 @@ export const useTasksStore = defineStore("tasks", () => {
         "jwToken"
       )}`,
     };
-    axios(config).then(function (response) {
+    axios(config).then(function () {
       const getIndex = finishedTasks.value.findIndex((item) => item.id === id);
       finishedTasks.value.splice(getIndex, 1);
     });
@@ -298,7 +298,7 @@ export const useTasksStore = defineStore("tasks", () => {
       }.json?auth=${$cookies.get("jwToken")}`,
       data: data,
     };
-    axios(config).then(function (response) {
+    axios(config).then(function () {
       const getIndex = createdTasks.value.findIndex(
         (item) => item.id === task.id
       );
