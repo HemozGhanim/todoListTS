@@ -6,32 +6,39 @@ import { SlideInOut } from "vue3-transitions";
 const store = useTasksStore();
 //build Edit Object
 interface editObj {
-  id?: string;
+  id: string;
   task_Name: string;
-  status?: string;
+  status: string;
 }
 
 //variables
 let task_Name = ref("");
 let vTextModel = ref("");
-const isEditing = ref(false);
-
+const dialog = ref(false);
 //functions to change edidting Value
 const EditingObj = ref<editObj>({
   id: "",
   task_Name: "",
   status: "",
 });
-function takeTaskDetails(task: editObj) {
+function takeTaskDetails() {
+  store.editTask(EditingObj.value);
+  EditingObj.value.task_Name = "";
+  EditingObj.value.id = "";
+  EditingObj.value.status = "";
+  dialog.value = false;
+}
+function putEditName(task: any) {
+  EditingObj.value.task_Name = task.task_Name;
   EditingObj.value.id = task.id;
-  EditingObj.value.task_Name = vTextModel.value;
   EditingObj.value.status = task.status;
 }
-function putEditName(el: any) {
-  isEditing.value = !isEditing.value;
-  vTextModel = el.task_Name;
+function closeEdit() {
+  dialog.value = !dialog.value;
+  vTextModel.value = "";
+  EditingObj.value.id = "";
+  EditingObj.value.status = "";
 }
-
 function ShowMessage() {
   setTimeout(() => {
     store.ifItemIncluded = false;
@@ -152,126 +159,23 @@ onUpdated(() => {
             <v-row>
               <TransitionGroup name="fade" tag="v-row" class="w-100">
                 <v-fade-transition group tag="v-row" class="w-100" key="task">
-                  <template v-for="task in store.createdTasks" :key="task.id">
-                    <v-col
-                      class="bg-darkBlue mb-2 w-100 rounded-pill"
-                      cols="12"
-                    >
-                      <v-row>
-                        <v-col
-                          cols="8"
-                          class="text-left d-flex justify-start align-center"
-                        >
-                          <v-text-field
-                            v-if="isEditing == true"
-                            class
-                            v-model="vTextModel"
-                            @update:model-value="takeTaskDetails(task)"
-                          ></v-text-field>
-                          <p class="px-3" v-else>
-                            {{ task.task_Name }}
-                          </p>
-                        </v-col>
-                        <v-col cols="4">
-                          <div
-                            v-if="isEditing == true"
-                            class="d-flex justify-center align-center flex-wrap w-100"
-                          >
-                            <v-btn
-                              class="px-2 mx-1"
-                              color="green"
-                              variant="outlined"
-                              @click="
-                                (isEditing = !isEditing),
-                                  store.editTask(EditingObj)
-                              "
-                              >done</v-btn
-                            >
-                          </div>
-                          <div
-                            v-else
-                            class="d-flex justify-center align-center flex-wrap w-100"
-                          >
-                            <v-btn
-                              class="ma-1"
-                              size="small"
-                              color="blue"
-                              icon="mdi-file-edit"
-                              @click="putEditName(task)"
-                            ></v-btn>
-                            <v-btn
-                              size="small"
-                              class="px-2 mx-1"
-                              color="red"
-                              icon="mdi-delete"
-                              @click="
-                                store.DeleteTask(task.id, {
-                                  id: `${task.id}`,
-                                  task_Name: `${task.task_Name}`,
-                                })
-                              "
-                            ></v-btn>
-                            <v-btn
-                              size="small"
-                              class="px-2 mx-1"
-                              color="green"
-                              icon="mdi-check"
-                              @click="
-                                store.finishedTask(task.id, {
-                                  id: `${task.id}`,
-                                  task_Name: `${task.task_Name}`,
-                                })
-                              "
-                            ></v-btn>
-                          </div>
-                        </v-col>
-                      </v-row>
-                    </v-col>
-                  </template>
-                </v-fade-transition>
-              </TransitionGroup>
-
-              <!-- <v-col
-                cols="12"
-                class="bg-darkBlue mb-2"
-                style="border-radius: 100px 100px"
-                v-for="task in store.createdTasks"
-              >
-                <TransitionGroup>
-                  <Transition name="fade">
+                  <v-col
+                    class="bg-darkBlue mb-2 w-100 rounded-pill"
+                    cols="12"
+                    v-for="(task, index) in store.createdTasks"
+                    :key="index"
+                  >
                     <v-row>
                       <v-col
                         cols="8"
                         class="text-left d-flex justify-start align-center"
                       >
-                        <v-text-field
-                          v-if="isEditing == true"
-                          class
-                          v-model="vTextModel"
-                          @update:model-value="takeTaskDetails(task)"
-                        ></v-text-field>
-                        <p class="px-3" v-else>
+                        <p class="px-3">
                           {{ task.task_Name }}
                         </p>
                       </v-col>
                       <v-col cols="4">
                         <div
-                          v-if="isEditing == true"
-                          class="d-flex justify-center align-center flex-wrap w-100"
-                        >
-                          <v-btn
-                            class="px-2 mx-1"
-                            color="green"
-                            variant="outlined"
-                            @click="
-                              (isEditing = !isEditing),
-                                store.editTask(EditingObj)
-                            "
-                            >done</v-btn
-                          >
-                        </div>
-                        <div
-                          v-else
                           class="d-flex justify-center align-center flex-wrap w-100"
                         >
                           <v-btn
@@ -279,10 +183,7 @@ onUpdated(() => {
                             size="small"
                             color="blue"
                             icon="mdi-file-edit"
-                            @click="
-                              (isEditing = !isEditing),
-                                putEditName(task.task_Name)
-                            "
+                            @click="(dialog = !dialog), putEditName(task)"
                           ></v-btn>
                           <v-btn
                             size="small"
@@ -311,15 +212,40 @@ onUpdated(() => {
                         </div>
                       </v-col>
                     </v-row>
-                  </Transition>
-                </TransitionGroup>
-              </v-col> -->
+                  </v-col>
+                </v-fade-transition>
+              </TransitionGroup>
             </v-row>
           </v-container>
         </v-card-item>
       </v-card>
     </v-container>
   </v-sheet>
+  <v-dialog v-model="dialog" width="500">
+    <v-card>
+      <v-card-item>
+        <v-text-field class v-model="EditingObj.task_Name"></v-text-field>
+      </v-card-item>
+      <v-card-item>
+        <div class="d-flex justify-center align-center flex-wrap w-100">
+          <v-btn
+            :loading="store.isLoading"
+            class="px-2 mx-1"
+            color="green"
+            variant="outlined"
+            @click="takeTaskDetails()"
+            >done</v-btn
+          ><v-btn
+            class="px-2 mx-1"
+            color="primary"
+            variant="outlined"
+            @click="closeEdit()"
+            >canel</v-btn
+          >
+        </div>
+      </v-card-item>
+    </v-card>
+  </v-dialog>
 </template>
 <style scoped>
 .fade-enter-active,

@@ -16,6 +16,7 @@ export const useTasksStore = defineStore("tasks", () => {
   let ExistMessage = ref<string>();
   let setTimeOutMessage = ref<number>();
   const $cookies = useCookies().cookies;
+  let isLoading = ref(false);
 
   //Get tasks function
   function getTasks() {
@@ -94,8 +95,6 @@ export const useTasksStore = defineStore("tasks", () => {
         console.log(error);
       });
   }
-  getTasks();
-
   function pushTasks(task: task_body) {
     if (createdTasks.value.some((el) => el.task_Name === task.task_Name)) {
       ifItemIncluded.value = true;
@@ -298,12 +297,18 @@ export const useTasksStore = defineStore("tasks", () => {
       }.json?auth=${$cookies.get("jwToken")}`,
       data: data,
     };
-    axios(config).then(function () {
-      const getIndex = createdTasks.value.findIndex(
-        (item) => item.id === task.id
-      );
-      createdTasks.value.splice(getIndex, 1, task);
-    });
+    axios(config)
+      .then(function () {
+        isLoading.value = true;
+        const getIndex = createdTasks.value.findIndex(
+          (item) => item.id === task.id
+        );
+        createdTasks.value.splice(getIndex, 1, task);
+        isLoading.value = false;
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   }
   function resetAllData() {
     createdTasks.value = [];
@@ -317,6 +322,7 @@ export const useTasksStore = defineStore("tasks", () => {
     ifItemIncluded,
     ExistMessage,
     setTimeOutMessage,
+    isLoading,
     pushTasks,
     DeleteTask,
     finishedTask,

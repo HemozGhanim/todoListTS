@@ -99,13 +99,13 @@ export const userAuthStore = defineStore("Users", () => {
   }
 
   function signOutUser() {
-    $cookies.remove("jwToken");
-    $cookies.remove("uid");
     TasksStore.resetAllData();
     heISIn.value = false;
     snackbar.value = true;
     snackBarText.value = "Logged Out - Thanks For Using Geek App";
     snackBarColor.value = theme.current.value.colors.darkBlue;
+    $cookies.remove("jwToken");
+    $cookies.remove("uid");
   }
 
   return {
