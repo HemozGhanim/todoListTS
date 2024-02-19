@@ -10,6 +10,7 @@ import App from "./App.vue";
 import "animate.css";
 const app = createApp(App);
 Sentry.init({
+  app: [app],
   dsn: "https://0ff2f3b566bd45f88591990d2ab27c45@o4506740210663424.ingest.sentry.io/4506771773390848",
   integrations: [
     Sentry.browserTracingIntegration({ router }),
@@ -28,6 +29,8 @@ Sentry.init({
   // Session Replay
   replaysSessionSampleRate: 0.1, // This sets the sample rate at 10%. You may want to change it to 100% while in development and then sample at a lower rate in production.
   replaysOnErrorSampleRate: 1.0, // If you're not already sampling the entire session, change the sample rate to 100% when sampling sessions where errors occur.
+  trackComponents: true,
+  timeout: 500,
 });
 app.use(Vue3Transitions);
 app.use(pinia);
