@@ -28,7 +28,8 @@ function takeTaskDetails(task: editObj) {
   EditingObj.value.status = task.status;
 }
 function putEditName(el: any) {
-  vTextModel = el;
+  isEditing.value = !isEditing.value;
+  vTextModel = el.task_Name;
 }
 
 function ShowMessage() {
@@ -196,10 +197,7 @@ onUpdated(() => {
                               size="small"
                               color="blue"
                               icon="mdi-file-edit"
-                              @click="
-                                (isEditing = !isEditing),
-                                  putEditName(task.task_Name)
-                              "
+                              @click="putEditName(task)"
                             ></v-btn>
                             <v-btn
                               size="small"

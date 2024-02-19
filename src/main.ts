@@ -10,7 +10,7 @@ import App from "./App.vue";
 import "animate.css";
 const app = createApp(App);
 Sentry.init({
-  app: [app],
+  app: app,
   dsn: "https://0ff2f3b566bd45f88591990d2ab27c45@o4506740210663424.ingest.sentry.io/4506771773390848",
   integrations: [
     Sentry.browserTracingIntegration({ router }),
