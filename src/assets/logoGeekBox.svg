@@ -2,28 +2,37 @@
 <!-- Generator: Adobe Illustrator 19.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 viewBox="0 0 500 500" style="enable-background:new 0 0 500 500;" xml:space="preserve">
+
+
 <style type="text/css">
-	.st0{fill:#002D4F;}
-	.st1{font-family:'Poppins-SemiBold';}
-	.st2{font-size:71.3217px;}
-	.st3{fill:#EA3560;}
-	.st4{fill:#1C507A;}
-	.st5{font-family:'Poppins-Medium';}
-	.st6{font-size:25.6333px;}
-	.st7{fill:#C7E7FF;}
-	.st8{fill:#F4B392;}
-	.st9{fill:#DD8F6C;}
-	.st10{fill:#FFFFFF;}
-	.st11{fill:#3382D1;}
-	.st12{display:none;}
-	.st13{display:inline;}
+		.st0{fill:#002D4F;}
+		.st1{
+		font-family: "Poppins", sans-serif;
+		font-weight: 600;
+		}
+		.st2{font-size:71.3217px;}
+		.st3{fill:#EA3560;}
+		.st4{fill:#154768;}
+		.st5{
+		font-family: "Poppins", sans-serif;
+		font-weight: 500;
+		}
+		.st6{font-size:25.6333px;}
+		.st7{fill:#C7E7FF;}
+		.st8{fill:#F4B392;}
+		.st9{fill:#DD8F6C;}
+		.st10{fill:#FFFFFF;}
+		.st11{fill:#3382D1;}
+		.st12{display:none;}
+		.st13{display:inline;}
 </style>
 <font horiz-adv-x="1000">
-<!-- Copyright 2020 The Poppins Project Authors (https://github.com/itfoundry/Poppins) -->
-<!-- Copyright: Copyright 2024 Adobe System Incorporated. All rights reserved. -->
+		<!-- Copyright 2020 The Poppins Project Authors (https://github.com/itfoundry/Poppins) -->
+		<!-- Copyright: Copyright 2024 Adobe System Incorporated. All rights reserved. -->
 <font-face font-family="Poppins-Medium" units-per-em="1000" underline-position="-75" underline-thickness="50"/>
 <missing-glyph horiz-adv-x="500" d="M0,700l500,0l0,-700l-500,0M420,650l-340,0l170,-255M50,95l170,255l-170,255M450,95l0,510l-170,-255M420,50l-170,255l-170,-255z"/>
-<glyph unicode="" horiz-adv-x="260"/>
+<glyph unicode="
+" horiz-adv-x="260"/>
 <glyph unicode=" " horiz-adv-x="260"/>
 <glyph unicode="&#x905;" horiz-adv-x="831" d="M854,740l0,-88l-122,0l0,-652l-104,0l0,308l-138,1C497,290 500,269 500,248C500,190 481,143 444,108C407,73 357,55 296,55C252,55 213,64 179,81C144,98 118,123 99,154C80,185 70,220 70,260l98,0C168,227 179,199 202,178C224,156 253,145 289,145C324,145 352,155 373,176C394,197 404,224 404,258C404,277 400,294 393,309l-2,0l0,5C370,352 332,371 278,371l-41,0l0,85l41,0C315,456 343,466 364,486C384,505 394,529 394,556C394,587 384,613 364,632C343,651 318,660 287,660C255,660 228,651 207,633C185,614 174,590 174,559l-97,0C77,597 86,630 104,659C121,688 146,710 178,726C210,741 246,749 287,749C347,749 396,733 433,700C470,667 488,624 488,570C488,532 478,500 458,473C438,446 409,427 371,417l0,-2C390,411 407,404 423,395l205,0l0,345z"/>
 <glyph unicode="&#x906;" horiz-adv-x="1126" d="M1156,652l-122,0l0,-652l-105,0l0,652l-197,0l0,-652l-104,0l0,308l-138,1C497,290 500,269 500,248C500,190 481,143 444,108C407,73 357,55 296,55C252,55 213,64 179,81C144,98 118,123 99,154C80,185 70,220 70,260l98,0C168,227 179,199 202,178C224,156 253,145 289,145C324,145 352,155 373,176C394,197 404,224 404,258C404,277 400,294 393,309l-2,0l0,5C370,352 332,371 278,371l-41,0l0,85l41,0C315,456 343,466 364,486C384,505 394,529 394,556C394,587 384,613 364,632C343,651 318,660 287,660C255,660 228,651 207,633C185,614 174,590 174,559l-97,0C77,597 86,630 104,659C121,688 146,710 178,726C210,741 246,749 287,749C347,749 396,733 433,700C470,667 488,624 488,570C488,532 478,500 458,473C438,446 409,427 371,417l0,-2C390,411 407,404 423,395l205,0l0,345l528,0z"/>
@@ -496,11 +505,12 @@
 </font>
 
 	<font horiz-adv-x="1000">
-<!-- Copyright 2020 The Poppins Project Authors (https://github.com/itfoundry/Poppins) -->
-<!-- Copyright: Copyright 2024 Adobe System Incorporated. All rights reserved. -->
+		<!-- Copyright 2020 The Poppins Project Authors (https://github.com/itfoundry/Poppins) -->
+		<!-- Copyright: Copyright 2024 Adobe System Incorporated. All rights reserved. -->
 <font-face font-family="Poppins-SemiBold" units-per-em="1000" underline-position="-75" underline-thickness="50"/>
 <missing-glyph horiz-adv-x="500" d="M0,700l500,0l0,-700l-500,0M420,650l-340,0l170,-255M50,95l170,255l-170,255M450,95l0,510l-170,-255M420,50l-170,255l-170,-255z"/>
-<glyph unicode="" horiz-adv-x="238"/>
+<glyph unicode="
+" horiz-adv-x="238"/>
 <glyph unicode=" " horiz-adv-x="238"/>
 <glyph unicode="&#x905;" horiz-adv-x="835" d="M855,740l0,-108l-111,0l0,-632l-129,0l0,287l-117,1C500,275 501,263 501,251C501,192 482,145 445,110C408,75 358,57 296,57C251,57 211,66 176,83C141,100 113,125 94,157C75,188 65,224 65,265l121,0C186,237 195,214 214,196C233,177 257,168 287,168C317,168 341,177 358,195C375,212 384,235 384,263C384,290 375,314 356,333C337,352 310,361 273,361l-43,0l0,104l43,0C305,465 330,473 348,490C366,507 375,527 375,551C375,578 367,599 350,616C333,632 311,640 286,640C259,640 236,632 218,616C200,600 191,579 191,554l-119,0C72,593 81,627 99,657C117,686 142,709 175,725C207,741 244,749 286,749C347,749 397,733 434,700C471,667 490,624 490,569C490,532 480,501 461,474C442,447 414,428 379,417l0,-2C396,412 413,405 429,394l186,0l0,346z"/>
 <glyph unicode="&#x906;" horiz-adv-x="1139" d="M1165,632l-111,0l0,-632l-129,0l0,632l-181,0l0,-632l-129,0l0,287l-117,1C500,275 501,263 501,251C501,192 482,145 445,110C408,75 358,57 296,57C251,57 211,66 176,83C141,100 113,125 94,157C75,188 65,224 65,265l121,0C186,237 195,214 214,196C233,177 257,168 287,168C317,168 341,177 358,195C375,212 384,235 384,263C384,290 375,314 356,333C337,352 310,361 273,361l-43,0l0,104l43,0C305,465 330,473 348,490C366,507 375,527 375,551C375,578 367,599 350,616C333,632 311,640 286,640C259,640 236,632 218,616C200,600 191,579 191,554l-119,0C72,593 81,627 99,657C117,686 142,709 175,725C207,741 244,749 286,749C347,749 397,733 434,700C471,667 490,624 490,569C490,532 480,501 461,474C442,447 414,428 379,417l0,-2C396,412 413,405 429,394l186,0l0,346l550,0z"/>

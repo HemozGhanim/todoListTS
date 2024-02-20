@@ -122,6 +122,7 @@ onUpdated(() => {
                 density="compact"
                 size="x-large"
                 color="orange-darken-3"
+                :disabled="task_Name == ''"
                 @click="
                   store.pushTasks({ task_Name }), (task_Name = ''), ShowMessage
                 "
