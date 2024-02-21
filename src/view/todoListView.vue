@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { onUpdated, ref } from "vue";
+import { onUpdated, onBeforeMount, ref } from "vue";
 import { useTasksStore } from "../store/todoStore";
 import { SlideInOut } from "vue3-transitions";
 //store declare
@@ -8,12 +8,13 @@ const store = useTasksStore();
 interface editObj {
   id: string;
   task_Name: string;
-  status: string;
+  status?: string;
 }
 
 //variables
 let task_Name = ref("");
-let vTextModel = ref("");
+let checkName = ref("");
+let EditDoneButton = ref<boolean>(false);
 const dialog = ref(false);
 //functions to change edidting Value
 const EditingObj = ref<editObj>({
@@ -21,31 +22,47 @@ const EditingObj = ref<editObj>({
   task_Name: "",
   status: "",
 });
-function takeTaskDetails() {
-  store.editTask(EditingObj.value);
+const takeTaskDetails = async () => {
+  await store.editTask(EditingObj.value);
   EditingObj.value.task_Name = "";
   EditingObj.value.id = "";
   EditingObj.value.status = "";
   dialog.value = false;
-}
-function putEditName(task: any) {
+};
+const putEditName = (task: any) => {
+  checkName.value = task.task_Name;
   EditingObj.value.task_Name = task.task_Name;
   EditingObj.value.id = task.id;
   EditingObj.value.status = task.status;
-}
-function closeEdit() {
+  EditDoneButton.value = true;
+};
+const checkDoneValidation = () => {
+  if (
+    EditingObj.value.task_Name === checkName.value ||
+    EditingObj.value.task_Name === null
+  ) {
+    EditDoneButton.value = true;
+    return true;
+  } else {
+    EditDoneButton.value = false;
+    return false;
+  }
+};
+const closeEdit = () => {
   dialog.value = !dialog.value;
-  vTextModel.value = "";
   EditingObj.value.id = "";
   EditingObj.value.status = "";
-}
-function ShowMessage() {
+};
+const ShowMessage = () => {
   setTimeout(() => {
     store.ifItemIncluded = false;
   }, 500);
-}
+};
 
 onUpdated(() => {
+  store.getTasks;
+});
+onBeforeMount(() => {
   store.getTasks;
 });
 </script>
@@ -56,7 +73,7 @@ onUpdated(() => {
     height="100%"
     class="d-flex align-center justify-center flex-nowrap bg-transparent"
   >
-    <v-container class="pa-4">
+    <v-container class="pa-4 d-flex align-center justify-center">
       <!-- <v-row>
         <v-col cols="12" class="px-1 mx-2 d-flex justify-end align-center">
           <v-btn
@@ -94,6 +111,7 @@ onUpdated(() => {
         elevation="5"
         color="#384152"
         rounded="xl"
+        width="80%"
         class="d-flex justify-center align-center flex-wrap pa-3 mx-4"
       >
         <v-card-title
@@ -101,7 +119,7 @@ onUpdated(() => {
         >
           Task List
         </v-card-title>
-        <v-card-item class="w-100">
+        <v-card-item class="w-100 pb-0">
           <v-row align="center" justify="center">
             <v-col cols="10" class="px-1 mx-2">
               <v-text-field
@@ -147,37 +165,45 @@ onUpdated(() => {
           </v-row>
         </v-card-item>
         <v-card-item class="w-100">
-          <v-card-title class="text-grey-lighten-1 text-left pl-6">
-            Tasks
-          </v-card-title>
           <v-container fluid>
             <p
-              class="text-h4 my-2 font-italic text-grey-darken-1"
+              class="text-h3 my-2 font-italic text-grey-darken-1 text-center"
               v-if="store.createdTasks.length == 0"
             >
-              No Tasks here
+              No Tasks Here Yet
             </p>
-            <v-row>
+            <v-row v-else>
+              <v-card-title class="text-grey-lighten-1 text-center pb-2 w-100">
+                <span class="magic"> your magical list </span>
+                <v-icon
+                  icon="mdi-auto-fix"
+                  size="small"
+                  class="magicIcon"
+                ></v-icon>
+              </v-card-title>
               <TransitionGroup name="fade" tag="v-row" class="w-100">
-                <v-fade-transition group tag="v-row" class="w-100" key="task">
+                <v-fade-transition
+                  group
+                  tag="v-row"
+                  class="w-100 d-flex justify-center flex-wrap align-center"
+                  key="task"
+                >
                   <v-col
                     class="bg-darkBlue mb-2 w-100 rounded-pill"
-                    cols="12"
+                    cols="9"
                     v-for="(task, index) in store.createdTasks"
                     :key="index"
                   >
                     <v-row>
                       <v-col
-                        cols="8"
+                        cols="7"
                         class="text-left d-flex justify-start align-center"
                       >
-                        <p class="px-3">
-                          {{ task.task_Name }}
-                        </p>
+                        <p class="px-3">{{ task.task_Name }}</p>
                       </v-col>
-                      <v-col cols="4">
+                      <v-col cols="5">
                         <div
-                          class="d-flex justify-center align-center flex-wrap w-100"
+                          class="d-flex justify-end align-center flex-wrap w-100"
                         >
                           <v-btn
                             class="ma-1"
@@ -223,17 +249,32 @@ onUpdated(() => {
     </v-container>
   </v-sheet>
   <v-dialog v-model="dialog" width="500">
-    <v-card>
+    <v-card
+      rounded="xl"
+      color="#384152"
+      height="200px"
+      class="d-flex justify-center align-stretch flex-wrap"
+    >
       <v-card-item>
-        <v-text-field class v-model="EditingObj.task_Name"></v-text-field>
+        <v-text-field
+          v-model="EditingObj.task_Name"
+          rounded
+          variant="solo"
+          density="comfortable"
+          clearable
+          bg-color="#111828"
+          :hide-details="true"
+          @update:model-value="checkDoneValidation()"
+        ></v-text-field>
       </v-card-item>
       <v-card-item>
-        <div class="d-flex justify-center align-center flex-wrap w-100">
+        <div class="d-flex justify-center align-center flex-wrap w-100 pa-3">
           <v-btn
             :loading="store.isLoading"
             class="px-2 mx-1"
             color="green"
             variant="outlined"
+            :disabled="EditDoneButton"
             @click="takeTaskDetails()"
             >done</v-btn
           ><v-btn
@@ -257,5 +298,32 @@ onUpdated(() => {
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+.magic,
+.magicIcon {
+  --bg-size: 200%;
+  --color-one: hsl(15 90% 55%);
+  --color-two: hsl(40 95% 55%);
+  /* font-size: clamp(3rem, 25vmin, 8rem); */
+  background: linear-gradient(
+      90deg,
+      var(--color-one),
+      var(--color-two),
+      var(--color-one)
+    )
+    0 0 / var(--bg-size) 100%;
+  color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .magic {
+    animation: move-bg 2s linear infinite;
+  }
+  @keyframes move-bg {
+    to {
+      background-position: var(--bg-size) 0;
+    }
+  }
 }
 </style>

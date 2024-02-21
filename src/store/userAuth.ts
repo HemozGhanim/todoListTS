@@ -27,7 +27,7 @@ export const userAuthStore = defineStore("Users", () => {
   const theme = useTheme();
 
   //functions
-  async function signUpUser(user: user_body) {
+  const signUpUser = async (user: user_body) => {
     heISIn.value = true;
     const data = JSON.stringify({
       email: user.email,
@@ -60,8 +60,8 @@ export const userAuthStore = defineStore("Users", () => {
         snackBarColor.value = "red";
         console.log(error);
       });
-  }
-  async function signInUser(user: user_body) {
+  };
+  const signInUser = async (user: user_body) => {
     heISIn.value = true;
     const data = JSON.stringify({
       email: user.email,
@@ -96,9 +96,9 @@ export const userAuthStore = defineStore("Users", () => {
         snackBarColor.value = "red";
         console.log(error);
       });
-  }
+  };
 
-  function signOutUser() {
+  const signOutUser = () => {
     TasksStore.resetAllData();
     heISIn.value = false;
     snackbar.value = true;
@@ -106,7 +106,7 @@ export const userAuthStore = defineStore("Users", () => {
     snackBarColor.value = theme.current.value.colors.darkBlue;
     $cookies.remove("jwToken");
     $cookies.remove("uid");
-  }
+  };
 
   return {
     signInUser,

@@ -29,14 +29,7 @@ const rules = reactive({
 });
 
 let SignUpView = ref(false);
-// function onChangeValue() {
-//   if (rules.passwordMatch(signUpRePassword.value) == true) {
-//     form.value = true;
-//     unable.value = false;
-//   } else {
-//     unable.value = true;
-//   }
-// }
+
 const IsPasswordMatch = computed(() => {
   if (signUpPassword.value.length > 0 && signUpRePassword.value.length > 0) {
     return signUpRePassword.value === signUpPassword.value;
@@ -45,15 +38,15 @@ const IsPasswordMatch = computed(() => {
   }
 });
 
-function signUp(_newEmail: string, _newPass: string) {
+const signUp = async (_newEmail: string, _newPass: string) => {
   if (form.value == true) {
-    userStore.signUpUser({
+    await userStore.signUpUser({
       email: _newEmail,
       password: _newPass,
     });
   }
-}
-function IsLoad() {
+};
+const IsLoad = () => {
   loading.value = true;
   if (userStore.heISIn === true) {
     setTimeout(() => {
@@ -64,10 +57,10 @@ function IsLoad() {
       loading.value = false;
     }, 2000);
   }
-}
-function toggleView() {
+};
+const toggleView = () => {
   SignUpView.value = !SignUpView.value;
-}
+};
 </script>
 <template>
   <v-sheet class="h-screen pa-3 bg-blue-lighten-1" style="overflow: hidden">

@@ -20,6 +20,11 @@ const vuetify = createVuetify({
           darkBlue: "#111828",
         },
       },
+      light: {
+        colors: {
+          darkBlue: "#111828",
+        },
+      },
     },
   },
   // theme: {

@@ -12,13 +12,13 @@ const theme = useTheme();
   <div>
     <v-tabs
       v-model="tab"
-      color="pink-accent-3"
+      color="pink-accent-2"
       align-tabs="center"
       :bg-color="theme.current.value.colors.darkBlue"
     >
-      <v-tab value="todo" class="font-weight-bold">todo</v-tab>
-      <v-tab value="finished" class="font-weight-bold">finished</v-tab>
-      <v-tab value="deleted" class="font-weight-bold">deleted</v-tab>
+      <v-tab value="todo" class="font-weight-medium">todo</v-tab>
+      <v-tab value="finished" class="font-weight-medium">finished</v-tab>
+      <v-tab value="deleted" class="font-weight-medium">deleted</v-tab>
     </v-tabs>
     <v-window v-model="tab">
       <v-window-item value="todo">

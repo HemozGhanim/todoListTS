@@ -10,13 +10,18 @@ const store = useTasksStore();
     class="d-flex align-center justify-center flex-nowrap bg-transparent pa-4"
   >
     <v-card elevation="5" width="80%" color="#384152" rounded="xl" class="pa-3">
-      <v-card-title class="text-grey-lighten-2 font-weight-medium text-h5">
-        Deleted Tasks List
+      <v-card-title
+        class="text-grey-lighten-2 font-weight-medium text-h5 d-flex justify-space-between align-center"
+      >
+        <span>Deleted Tasks List</span>
+        <v-btn prepend-icon="mdi-delete-forever" color="warning" variant="tonal"
+          >Delete All</v-btn
+        >
       </v-card-title>
       <v-card-item>
         <v-container fluid>
           <p
-            class="text-h4 my-2 font-italic text-grey-darken-1"
+            class="text-h4 my-2 font-italic text-grey-darken-1 text-center"
             v-if="store.deletedTasks.length == 0"
           >
             No Tasks here

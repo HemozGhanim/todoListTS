@@ -19,7 +19,7 @@ export const useTasksStore = defineStore("tasks", () => {
   let isLoading = ref(false);
 
   //Get tasks function
-  function getTasks() {
+  const getTasks = () => {
     const config = {
       method: "get",
       baseURL: import.meta.env.VITE_APP_API_URL,
@@ -94,8 +94,9 @@ export const useTasksStore = defineStore("tasks", () => {
       .catch(function (error) {
         console.log(error);
       });
-  }
-  function pushTasks(task: task_body) {
+  };
+
+  const pushTasks = async (task: task_body) => {
     if (createdTasks.value.some((el) => el.task_Name === task.task_Name)) {
       ifItemIncluded.value = true;
       setTimeOutMessage.value = 1;
@@ -117,7 +118,7 @@ export const useTasksStore = defineStore("tasks", () => {
         )}`,
         data: data,
       };
-      axios(config)
+      await axios(config)
         .then(function () {
           getTasks();
         })
@@ -126,9 +127,9 @@ export const useTasksStore = defineStore("tasks", () => {
         });
       ifItemIncluded.value = false;
     }
-  }
+  };
 
-  function DeleteTask(id: any, task: task_body) {
+  const DeleteTask = async (id: any, task: task_body) => {
     const data = JSON.stringify({
       id: task.id,
       task_Name: task.task_Name,
@@ -145,7 +146,7 @@ export const useTasksStore = defineStore("tasks", () => {
       )}`,
       data: data,
     };
-    axios(config)
+    await axios(config)
       .then(() => {
         const objIndex = createdTasks.value.findIndex((item) => item.id === id);
         createdTasks.value.splice(objIndex, 1);
@@ -158,8 +159,40 @@ export const useTasksStore = defineStore("tasks", () => {
       .catch((error) => {
         console.log(error);
       });
-  }
-  function finishedTask(id: any, task: task_body) {
+  };
+
+  // const DeleteAllTasks = async (id: any, task: task_body) => {
+  //   const data = JSON.stringify({
+  //     id: task.id,
+  //     task_Name: task.task_Name,
+  //     status: "deleted",
+  //   });
+  //   const config = {
+  //     method: "put",
+  //     baseURL: import.meta.env.VITE_APP_API_URL,
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     url: `/users/${$cookies.get("uid")}/tasks/${id}.json?auth=${$cookies.get(
+  //       "jwToken"
+  //     )}`,
+  //     data: data,
+  //   };
+  //   await axios(config)
+  //     .then(() => {
+  //       const objIndex = createdTasks.value.findIndex((item) => item.id === id);
+  //       createdTasks.value.splice(objIndex, 1);
+  //       deletedTasks.value.push({
+  //         id: task.id,
+  //         task_Name: task.task_Name,
+  //         status: "deleted",
+  //       });
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // };
+  const finishedTask = async (id: any, task: task_body) => {
     const data = JSON.stringify({
       id: task.id,
       task_Name: task.task_Name,
@@ -176,7 +209,7 @@ export const useTasksStore = defineStore("tasks", () => {
       )}`,
       data: data,
     };
-    axios(config)
+    await axios(config)
       .then(() => {
         const objIndex = createdTasks.value.findIndex((item) => item.id === id);
         createdTasks.value.splice(objIndex, 1);
@@ -189,8 +222,9 @@ export const useTasksStore = defineStore("tasks", () => {
       .catch((error) => {
         console.log(error);
       });
-  }
-  function UnDeleteTask(id: any, task: task_body) {
+  };
+
+  const UnDeleteTask = async (id: any, task: task_body) => {
     const data = JSON.stringify({
       id: task.id,
       task_Name: task.task_Name,
@@ -207,7 +241,7 @@ export const useTasksStore = defineStore("tasks", () => {
       )}`,
       data: data,
     };
-    axios(config).then(function () {
+    await axios(config).then(function () {
       const getIndex = deletedTasks.value.findIndex((item) => item.id === id);
       deletedTasks.value.splice(getIndex, 1);
       if (createdTasks.value.some((el) => el.task_Name === task.task_Name)) {
@@ -221,8 +255,9 @@ export const useTasksStore = defineStore("tasks", () => {
         });
       }
     });
-  }
-  function perDeleteTask(id: any) {
+  };
+
+  const perDeleteTask = async (id: any) => {
     const config = {
       method: "delete",
       baseURL: import.meta.env.VITE_APP_API_URL,
@@ -230,12 +265,12 @@ export const useTasksStore = defineStore("tasks", () => {
         "jwToken"
       )}`,
     };
-    axios(config).then(function () {
+    await axios(config).then(function () {
       const getIndex = deletedTasks.value.findIndex((item) => item.id === id);
       deletedTasks.value.splice(getIndex, 1);
     });
-  }
-  function unfinishedTask(id: any, task: task_body) {
+  };
+  const unfinishedTask = async (id: any, task: task_body) => {
     const data = JSON.stringify({
       id: task.id,
       task_Name: task.task_Name,
@@ -252,7 +287,7 @@ export const useTasksStore = defineStore("tasks", () => {
       )}`,
       data: data,
     };
-    axios(config).then(function () {
+    await axios(config).then(function () {
       const getIndex = finishedTasks.value.findIndex((item) => item.id === id);
       finishedTasks.value.splice(getIndex, 1);
       if (createdTasks.value.some((el) => el.task_Name === task.task_Name)) {
@@ -266,8 +301,9 @@ export const useTasksStore = defineStore("tasks", () => {
         });
       }
     });
-  }
-  function permanentDeleteFinishedTask(id: any) {
+  };
+
+  const permanentDeleteFinishedTask = async (id: any) => {
     const config = {
       method: "delete",
       baseURL: import.meta.env.VITE_APP_API_URL,
@@ -275,12 +311,13 @@ export const useTasksStore = defineStore("tasks", () => {
         "jwToken"
       )}`,
     };
-    axios(config).then(function () {
+    await axios(config).then(function () {
       const getIndex = finishedTasks.value.findIndex((item) => item.id === id);
       finishedTasks.value.splice(getIndex, 1);
     });
-  }
-  function editTask(task: task_body) {
+  };
+
+  const editTask = async (task: task_body) => {
     const data = JSON.stringify({
       id: task.id,
       task_Name: task.task_Name,
@@ -297,19 +334,24 @@ export const useTasksStore = defineStore("tasks", () => {
       }.json?auth=${$cookies.get("jwToken")}`,
       data: data,
     };
-    axios(config)
+    await axios(config)
       .then(function () {
         isLoading.value = true;
         const getIndex = createdTasks.value.findIndex(
           (item) => item.id === task.id
         );
-        createdTasks.value.splice(getIndex, 1, task);
+        try {
+          createdTasks.value.splice(getIndex, 1);
+        } catch {
+          throw new Error("no splice");
+        }
+        getTasks();
         isLoading.value = false;
       })
       .catch(function (error) {
         console.log(error);
       });
-  }
+  };
   function resetAllData() {
     createdTasks.value = [];
     finishedTasks.value = [];

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed } from "vue";
 import avatarIcon from "../../assets/logoGeekBoxIcon.png";
 import { userAuthStore } from "../../store/userAuth";
 // import { useTheme } from "vuetify";
@@ -6,6 +7,9 @@ const userStore = userAuthStore();
 // const theme = useTheme();
 const comingVersin = import.meta.env.VITE_APP_COMING_VERSION;
 const props = defineProps(["drawer"]);
+const userEmail = computed(() => {
+  return userStore.userEmail;
+});
 </script>
 <template>
   <v-navigation-drawer
@@ -17,7 +21,7 @@ const props = defineProps(["drawer"]);
     <v-list nav>
       <v-list-item
         :prepend-avatar="avatarIcon"
-        :title="userStore.userEmail"
+        :title="userEmail"
       ></v-list-item>
 
       <v-divider></v-divider>

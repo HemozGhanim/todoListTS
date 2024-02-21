@@ -11,17 +11,17 @@ const store = useTasksStore();
   >
     <v-card elevation="5" width="80%" color="#384152" rounded="xl" class="pa-3">
       <v-card-title
-        class="text-grey-lighten-2 w-100 font-weight-medium text-h5"
+        class="text-grey-lighten-2 font-weight-medium text-h5 d-flex justify-space-between align-center"
       >
-        Finished Task List
+        <span>Finished Task List</span>
+        <v-btn prepend-icon="mdi-delete-forever" color="warning" variant="tonal"
+          >Delete All</v-btn
+        >
       </v-card-title>
-      <!-- <v-card-item>
-          <v-btn block class="right" color="red">Delete All</v-btn>
-        </v-card-item> -->
       <v-card-item>
         <v-container fluid>
           <p
-            class="text-h4 my-2 font-italic text-grey-darken-1"
+            class="text-h4 my-2 font-italic text-grey-darken-1 text-center"
             v-if="store.finishedTasks.length == 0"
           >
             No Tasks here
