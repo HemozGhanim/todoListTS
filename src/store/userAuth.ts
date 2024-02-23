@@ -53,6 +53,7 @@ export const userAuthStore = defineStore("Users", () => {
         const data = res.data;
         console.log(data);
         userDataObj.value = data;
+        $cookies.set("userName", btoa(userDataObj.value.userName));
       })
       .catch(function (err) {
         console.log(err);
@@ -137,7 +138,6 @@ export const userAuthStore = defineStore("Users", () => {
         $cookies.set("jwToken", data.idToken);
         $cookies.set("uid", data.localId);
         getUserData();
-        $cookies.set("userName", btoa(userDataObj.value.userName));
         heISIn.value = false;
         snackbar.value = true;
         snackBarText.value = "Loggedin Successfuly";

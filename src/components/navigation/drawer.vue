@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onBeforeMount } from "vue";
+import { onBeforeMount, computed } from "vue";
 import avatarIcon from "../../assets/logoGeekBoxIcon.png";
 import { userAuthStore } from "../../store/userAuth";
 import { useCookies } from "vue3-cookies";
@@ -9,7 +9,10 @@ const $cookies = useCookies().cookies;
 
 const comingVersin = import.meta.env.VITE_APP_COMING_VERSION;
 const props = defineProps(["drawer"]);
-const DecodeuserName = atob($cookies.get("userName"));
+const DecodeuserName = computed(() => {
+  return atob($cookies.get("userName"));
+});
+
 onBeforeMount(() => {
   userStore.getUserData();
 });
