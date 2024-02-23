@@ -4,6 +4,12 @@ import LogoSmallPhoto from "../assets/logoGeekBox.png";
 import { userAuthStore } from "../store/userAuth";
 import { computed, reactive, ref } from "vue";
 
+interface user_data {
+  fristName: string;
+  lastName: string;
+  userName: string;
+  dateOfBirth: string;
+}
 const userStore = userAuthStore();
 
 let email = ref("");
@@ -11,6 +17,12 @@ let password = ref("");
 let signUpEmail = ref("");
 let signUpPassword = ref("");
 let signUpRePassword = ref("");
+let userData = ref<user_data>({
+  fristName: "",
+  lastName: "",
+  userName: "",
+  dateOfBirth: "",
+});
 let loading = ref(false);
 let form = ref(false);
 let showPass = ref(false);
@@ -38,14 +50,6 @@ const IsPasswordMatch = computed(() => {
   }
 });
 
-const signUp = async (_newEmail: string, _newPass: string) => {
-  if (form.value == true) {
-    await userStore.signUpUser({
-      email: _newEmail,
-      password: _newPass,
-    });
-  }
-};
 const IsLoad = () => {
   loading.value = true;
   if (userStore.heISIn === true) {
@@ -55,11 +59,27 @@ const IsLoad = () => {
   } else {
     setTimeout(() => {
       loading.value = false;
-    }, 2000);
+    }, 500);
   }
 };
 const toggleView = () => {
   SignUpView.value = !SignUpView.value;
+};
+const signUp = async (
+  _newEmail: string,
+  _newPass: string,
+  userData: user_data
+) => {
+  if (form.value == true) {
+    await userStore.signUpUser(
+      {
+        email: _newEmail,
+        password: _newPass,
+      },
+      userData
+    );
+    toggleView();
+  }
 };
 </script>
 <template>
@@ -81,7 +101,7 @@ const toggleView = () => {
         class="h-screen elevation-5 BgSide d-flex justify-center align-center flex-wrap overflow-y-auto scrollable-div"
         v-if="SignUpView"
       >
-        <div class="ImgBox w-100 h-25">
+        <!-- <div class="ImgBox w-100 h-25">
           <v-img
             aspect-ratio="16/9"
             crossorigin="use-credentials"
@@ -89,19 +109,74 @@ const toggleView = () => {
             :inline="true"
             :src="LogoSmallPhoto"
           ></v-img>
-        </div>
+        </div> -->
 
-        <v-spacer></v-spacer>
+        <!-- <v-spacer></v-spacer> -->
         <v-card
           width="100%"
           color="transparent"
           elevation="0"
           class="my-auto d-block"
         >
-          <v-card-title>signUp</v-card-title>
+          <v-card-title class="text-center text-h6">signUp</v-card-title>
           <v-spacer></v-spacer>
-          <v-card-item>
-            <v-form v-model="form">
+          <v-card-item class="pa-0">
+            <v-form
+              v-model="form"
+              class="w-100 d-flex flex-wrap align-center justify-center pa-0"
+            >
+              <v-text-field
+                bg-color="white"
+                required
+                clearable
+                label="frist Name"
+                placeholder="Ibrahem"
+                type="text"
+                variant="solo"
+                :rules="[rules.required]"
+                v-model="userData.fristName"
+                rounded
+                class="w-50 px-1"
+              ></v-text-field>
+              <v-text-field
+                bg-color="white"
+                required
+                clearable
+                label="Last Name"
+                placeholder="Ghanim"
+                type="text"
+                variant="solo"
+                :rules="[rules.required]"
+                v-model="userData.lastName"
+                rounded
+                class="w-50 px-1"
+              ></v-text-field>
+              <v-text-field
+                bg-color="white"
+                required
+                clearable
+                label="UserName"
+                placeholder="Hemoz Ghanim"
+                type="text"
+                variant="solo"
+                :rules="[rules.required]"
+                v-model="userData.userName"
+                rounded
+                class="w-50 px-1"
+              ></v-text-field>
+              <v-text-field
+                bg-color="white"
+                required
+                clearable
+                label="Date Of Birth"
+                placeholder="1997-09-15"
+                type="date"
+                variant="solo"
+                :rules="[rules.required]"
+                v-model="userData.dateOfBirth"
+                rounded
+                class="w-50 px-1"
+              ></v-text-field>
               <v-text-field
                 bg-color="white"
                 required
@@ -113,6 +188,7 @@ const toggleView = () => {
                 :rules="[rules.required, rules.email]"
                 v-model="signUpEmail"
                 rounded
+                class="w-100"
               ></v-text-field>
               <v-text-field
                 :append-inner-icon="showPass2 ? 'mdi-eye' : 'mdi-eye-off'"
@@ -127,6 +203,7 @@ const toggleView = () => {
                 :rules="[rules.required, rules.min]"
                 v-model="signUpPassword"
                 rounded
+                class="w-100"
               ></v-text-field>
               <v-text-field
                 :append-inner-icon="showPass ? 'mdi-eye' : 'mdi-eye-off'"
@@ -141,6 +218,7 @@ const toggleView = () => {
                 :rules="[rules.required, rules.passwordMatch]"
                 v-model="signUpRePassword"
                 rounded
+                class="w-100"
               ></v-text-field>
             </v-form>
             <v-btn
@@ -148,7 +226,7 @@ const toggleView = () => {
               rounded
               class="mb-8 mt-4 bg-MainColor text-white"
               size="large"
-              @click="IsLoad(), signUp(signUpEmail, signUpPassword)"
+              @click="IsLoad(), signUp(signUpEmail, signUpPassword, userData)"
               to="/todo"
               :loading="loading"
               :disabled="!IsPasswordMatch"
@@ -194,7 +272,7 @@ const toggleView = () => {
           <v-card-title>Login</v-card-title>
           <v-spacer></v-spacer>
           <v-card-item>
-            <v-form v-model="form">
+            <v-form>
               <v-text-field
                 bg-color="white"
                 required

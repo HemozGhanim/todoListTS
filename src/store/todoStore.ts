@@ -17,9 +17,11 @@ export const useTasksStore = defineStore("tasks", () => {
   let setTimeOutMessage = ref<number>();
   const $cookies = useCookies().cookies;
   let isLoading = ref(false);
+  // const jwt = $cookies.get("jwToken");
+  // const uid = $cookies.get("uid");
 
   //Get tasks function
-  const getTasks = () => {
+  function getTasks() {
     const config = {
       method: "get",
       baseURL: import.meta.env.VITE_APP_API_URL,
@@ -94,7 +96,8 @@ export const useTasksStore = defineStore("tasks", () => {
       .catch(function (error) {
         console.log(error);
       });
-  };
+  }
+  getTasks();
 
   const pushTasks = async (task: task_body) => {
     if (createdTasks.value.some((el) => el.task_Name === task.task_Name)) {

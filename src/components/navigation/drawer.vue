@@ -1,14 +1,17 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { onBeforeMount } from "vue";
 import avatarIcon from "../../assets/logoGeekBoxIcon.png";
 import { userAuthStore } from "../../store/userAuth";
-// import { useTheme } from "vuetify";
+import { useCookies } from "vue3-cookies";
+
 const userStore = userAuthStore();
-// const theme = useTheme();
+const $cookies = useCookies().cookies;
+
 const comingVersin = import.meta.env.VITE_APP_COMING_VERSION;
 const props = defineProps(["drawer"]);
-const userEmail = computed(() => {
-  return userStore.userEmail;
+const DecodeuserName = atob($cookies.get("userName"));
+onBeforeMount(() => {
+  userStore.getUserData();
 });
 </script>
 <template>
@@ -21,7 +24,7 @@ const userEmail = computed(() => {
     <v-list nav>
       <v-list-item
         :prepend-avatar="avatarIcon"
-        :title="userEmail"
+        :title="DecodeuserName"
       ></v-list-item>
 
       <v-divider></v-divider>

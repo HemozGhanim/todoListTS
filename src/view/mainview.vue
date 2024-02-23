@@ -2,11 +2,16 @@
 import todoComponent from "../view/todoListView.vue";
 import finishedCompoenet from "../view/finishedListview.vue";
 import deletedCompoenet from "../view/deletedListview.vue";
+import { useTasksStore } from "../store/todoStore";
 import { useTheme } from "vuetify";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 let tab = ref();
 
 const theme = useTheme();
+const store = useTasksStore();
+onMounted(() => {
+  store.getTasks;
+});
 </script>
 <template>
   <div>

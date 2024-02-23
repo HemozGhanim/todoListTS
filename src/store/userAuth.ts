@@ -10,29 +10,67 @@ interface user_body {
   password: string;
   returnSecureToken?: boolean;
 }
+interface user_data {
+  fristName: string;
+  lastName: string;
+  userName: string;
+  dateOfBirth: string;
+}
 
 export const userAuthStore = defineStore("Users", () => {
   //stores
   const TasksStore = useTasksStore();
   //variables
   const heISIn = ref(false);
+  const userDataObj = ref<user_data>({
+    fristName: "",
+    lastName: "",
+    userName: "",
+    dateOfBirth: "",
+  });
   const signInErrorMessage = ref("");
   const InValied = ref(false);
   const $cookies = useCookies().cookies;
-  const userEmail = ref("");
   const uid = ref("");
   const snackbar = ref(false);
   const snackBarText = ref("");
   const snackBarColor = ref("");
   const theme = useTheme();
 
+  const getUserData = () => {
+    const config = {
+      method: "get",
+      baseURL: import.meta.env.VITE_APP_API_URL,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      url: `/users/${$cookies.get("uid")}/userData.json?auth=${$cookies.get(
+        "jwToken"
+      )}`,
+    };
+    axios(config)
+      .then((res) => {
+        const data = res.data;
+        console.log(data);
+        userDataObj.value = data;
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
+  };
   //functions
-  const signUpUser = async (user: user_body) => {
+  const signUpUser = async (user: user_body, userData: user_data) => {
     heISIn.value = true;
     const data = JSON.stringify({
       email: user.email,
       password: user.password,
       returnSecureToken: true,
+    });
+    const dataUser = JSON.stringify({
+      fristName: userData.fristName,
+      lastName: userData.lastName,
+      userName: userData.userName,
+      dateOfBirth: userData.dateOfBirth,
     });
     const config = {
       method: "post",
@@ -43,17 +81,33 @@ export const userAuthStore = defineStore("Users", () => {
       url: `:signUp?key=${import.meta.env.VITE_APP_API_KEY}`,
       data: data,
     };
+
     await axios(config)
       .then(function (response) {
         const data = response.data;
-        $cookies.set("jwToken", data.idToken);
-        $cookies.set("uid", data.localId);
-        userEmail.value = data.email;
-        heISIn.value = false;
-        snackbar.value = true;
-        snackBarText.value = "Created Successfuly";
-        snackBarColor.value = "success";
-        router.push("/");
+        const token = data.idToken;
+        const userId = data.localId;
+
+        const configDataUser = {
+          method: "put",
+          baseURL: import.meta.env.VITE_APP_API_URL,
+          headers: {
+            "Content-Type": "application/json",
+          },
+          url: `/users/${userId}/userData.json?auth=${token}`,
+          data: dataUser,
+        };
+        axios(configDataUser)
+          .then(function () {
+            heISIn.value = false;
+            snackbar.value = true;
+            snackBarText.value = "Created Successfuly";
+            snackBarColor.value = "success";
+            router.push("/");
+          })
+          .catch(function (userErr) {
+            console.log(userErr);
+          });
       })
       .catch(function (error) {
         snackBarText.value = "Error In Creating Account";
@@ -82,7 +136,8 @@ export const userAuthStore = defineStore("Users", () => {
         const data = response.data;
         $cookies.set("jwToken", data.idToken);
         $cookies.set("uid", data.localId);
-        userEmail.value = data.email;
+        getUserData();
+        $cookies.set("userName", btoa(userDataObj.value.userName));
         heISIn.value = false;
         snackbar.value = true;
         snackBarText.value = "Loggedin Successfuly";
@@ -106,31 +161,21 @@ export const userAuthStore = defineStore("Users", () => {
     snackBarColor.value = theme.current.value.colors.darkBlue;
     $cookies.remove("jwToken");
     $cookies.remove("uid");
+    $cookies.remove("userName");
   };
 
   return {
     signInUser,
     signOutUser,
     signUpUser,
+    getUserData,
     heISIn,
     signInErrorMessage,
     InValied,
-    userEmail,
     uid,
     snackbar,
     snackBarText,
     snackBarColor,
+    userDataObj,
   };
 });
-
-// const config = {
-//       method: "get",
-//       baseURL: import.meta.env.VITE_APP_API_URL,
-//       headers: {
-//         Authorization: `Bearer ${jwtToken}`,
-//         "Content-Type": "application/json",
-//       },
-//       url: "/admin/users",
-//     };
-//     if (useCookies().cookies.isKey("jwtToken")) {
-//       const res = await axios(config)

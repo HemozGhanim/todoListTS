@@ -1,9 +1,10 @@
 <script lang="ts" setup>
-import { onUpdated, onBeforeMount, ref } from "vue";
+import { onMounted, ref } from "vue";
 import { useTasksStore } from "../store/todoStore";
 import { SlideInOut } from "vue3-transitions";
 //store declare
 const store = useTasksStore();
+
 //build Edit Object
 interface editObj {
   id: string;
@@ -59,10 +60,7 @@ const ShowMessage = () => {
   }, 500);
 };
 
-onUpdated(() => {
-  store.getTasks;
-});
-onBeforeMount(() => {
+onMounted(() => {
   store.getTasks;
 });
 </script>
