@@ -21,9 +21,9 @@ onMounted(() => {
       align-tabs="center"
       :bg-color="theme.current.value.colors.darkBlue"
     >
-      <v-tab value="todo" class="font-weight-medium">todo</v-tab>
-      <v-tab value="finished" class="font-weight-medium">finished</v-tab>
-      <v-tab value="deleted" class="font-weight-medium">deleted</v-tab>
+      <v-tab value="todo" class="font-weight-medium">Created</v-tab>
+      <v-tab value="finished" class="font-weight-medium">Finished</v-tab>
+      <v-tab value="deleted" class="font-weight-medium">Deleted</v-tab>
     </v-tabs>
     <v-window v-model="tab">
       <v-window-item value="todo">

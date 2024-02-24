@@ -1,18 +1,23 @@
 <script setup lang="ts">
-import { onBeforeMount, computed } from "vue";
+import { onBeforeMount, computed, ref } from "vue";
 import avatarIcon from "../../assets/logoGeekBoxIcon.png";
 import { userAuthStore } from "../../store/userAuth";
 import { useCookies } from "vue3-cookies";
-
+import { useDisplay } from "vuetify";
+const { xs } = useDisplay();
 const userStore = userAuthStore();
 const $cookies = useCookies().cookies;
-
 const comingVersin = import.meta.env.VITE_APP_COMING_VERSION;
 const props = defineProps(["drawer"]);
 const DecodeuserName = computed(() => {
-  return atob($cookies.get("userName"));
+  return $cookies.get("userName");
 });
-
+const drawerview = ref(false);
+if (xs.value) {
+  drawerview.value = false;
+} else {
+  drawerview.value = true;
+}
 onBeforeMount(() => {
   userStore.getUserData();
 });
@@ -20,8 +25,8 @@ onBeforeMount(() => {
 <template>
   <v-navigation-drawer
     v-model="props.drawer"
-    expand-on-hover
-    rail
+    :expand-on-hover="drawerview"
+    :rail="drawerview"
     color="#384152"
   >
     <v-list nav>

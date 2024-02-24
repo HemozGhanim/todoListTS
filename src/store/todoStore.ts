@@ -97,7 +97,9 @@ export const useTasksStore = defineStore("tasks", () => {
         console.log(error);
       });
   }
-  getTasks();
+  if ($cookies.get("jwToken")) {
+    getTasks();
+  }
 
   const pushTasks = async (task: task_body) => {
     if (createdTasks.value.some((el) => el.task_Name === task.task_Name)) {

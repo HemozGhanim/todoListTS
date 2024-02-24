@@ -3,6 +3,7 @@ import LogoPhoto from "../assets/logoGeekBox.svg";
 import LogoSmallPhoto from "../assets/logoGeekBox.png";
 import { userAuthStore } from "../store/userAuth";
 import { computed, reactive, ref } from "vue";
+import { useDisplay } from "vuetify";
 
 interface user_data {
   fristName: string;
@@ -11,6 +12,7 @@ interface user_data {
   dateOfBirth: string;
 }
 const userStore = userAuthStore();
+const { mdAndUp } = useDisplay();
 
 let email = ref("");
 let password = ref("");
@@ -85,7 +87,14 @@ const signUp = async (
 <template>
   <v-sheet class="h-screen pa-3 bg-blue-lighten-1" style="overflow: hidden">
     <v-row>
-      <v-col cols="8" class="h-screen py-5">
+      <v-col
+        cols="12"
+        md="8"
+        sm="12"
+        xl="8"
+        class="h-screen py-5"
+        v-show="mdAndUp"
+      >
         <v-img
           aspect-ratio="16/9"
           crossorigin="use-credentials"
@@ -97,7 +106,10 @@ const signUp = async (
       </v-col>
       <!-- signUp view -->
       <v-col
-        cols="4"
+        cols="12"
+        md="4"
+        sm="12"
+        xl="4"
         class="h-screen elevation-5 BgSide d-flex justify-center align-center flex-wrap overflow-y-auto scrollable-div"
         v-if="SignUpView"
       >
@@ -248,7 +260,10 @@ const signUp = async (
       </v-col>
       <!-- signIn View -->
       <v-col
-        cols="4"
+        cols="12"
+        md="4"
+        sm="12"
+        xl="4"
         class="h-screen elevation-5 BgSide d-flex justify-center align-center flex-wrap overflow-y-auto scrollable-div"
         v-else
       >

@@ -2,8 +2,11 @@
 import { onMounted, ref } from "vue";
 import { useTasksStore } from "../store/todoStore";
 import { SlideInOut } from "vue3-transitions";
+import { useDisplay } from "vuetify";
+
 //store declare
 const store = useTasksStore();
+const { smAndDown } = useDisplay();
 
 //build Edit Object
 interface editObj {
@@ -11,7 +14,6 @@ interface editObj {
   task_Name: string;
   status?: string;
 }
-
 //variables
 let task_Name = ref("");
 let checkName = ref("");
@@ -71,7 +73,9 @@ onMounted(() => {
     height="100%"
     class="d-flex align-center justify-center flex-nowrap bg-transparent"
   >
-    <v-container class="pa-4 d-flex align-center justify-center">
+    <v-container
+      class="d-flex align-center justify-center pa-xs-1 pa-sm-4 pa-md-4 pa-lg-4 pa-xl-4"
+    >
       <!-- <v-row>
         <v-col cols="12" class="px-1 mx-2 d-flex justify-end align-center">
           <v-btn
@@ -109,8 +113,8 @@ onMounted(() => {
         elevation="5"
         color="#384152"
         rounded="xl"
-        width="80%"
-        class="d-flex justify-center align-center flex-wrap pa-3 mx-4"
+        :width="smAndDown ? '100%' : '80%'"
+        class="d-flex justify-center align-center flex-wrap pa-xs-1 pa-sm-1 pa-md-3 pa-lg-3 pa-xl-3 mx-xs-2 mx-sm-2 mx-md-4 mx-lg-4 mx-xl-4"
       >
         <v-card-title
           class="text-grey-lighten-2 font-weight-medium text-h5 w-100 text-center"
@@ -118,8 +122,8 @@ onMounted(() => {
           Task List
         </v-card-title>
         <v-card-item class="w-100 pb-0">
-          <v-row align="center" justify="center">
-            <v-col cols="10" class="px-1 mx-2">
+          <v-row class="d-flex justify-center align-center flex-nowrap ma-0">
+            <v-col cols="10" sm="10" md="10" xl="10" class="px-1 mx-2">
               <v-text-field
                 label="Your Task"
                 variant="solo"
@@ -132,7 +136,7 @@ onMounted(() => {
                 "
               ></v-text-field>
             </v-col>
-            <v-col cols="1" class="pa-0">
+            <v-col cols="2" sm="2" md="2" xl="2" class="pa-0">
               <v-btn
                 icon="mdi-plus"
                 density="compact"
@@ -144,6 +148,8 @@ onMounted(() => {
                 "
               ></v-btn>
             </v-col>
+          </v-row>
+          <v-row>
             <SlideInOut
               entry="left"
               exit="top"
@@ -154,7 +160,7 @@ onMounted(() => {
               moveClass="group-move-enter"
               leaveActiveClass="group-move-leave"
             >
-              <v-col v-if="store.ifItemIncluded" class="text-center">
+              <v-col cols="12" v-if="store.ifItemIncluded" class="text-center">
                 <span class="my-2 px-1 mx-2 text-red text-h6">{{
                   store.ExistMessage
                 }}</span>
@@ -162,10 +168,12 @@ onMounted(() => {
             </SlideInOut>
           </v-row>
         </v-card-item>
-        <v-card-item class="w-100">
+        <v-card-item
+          class="w-100 px-1 px-sm-1 px-md-2 px-lg-2 px-xl-2 px-xxl-2"
+        >
           <v-container fluid>
             <p
-              class="text-h3 my-2 font-italic text-grey-darken-1 text-center"
+              class="text-h4 text-sm-h3 text-md-h3 text-lg-h2 text-xl-h1 text-xxl-h1 my-2 font-italic text-grey-darken-1 text-center"
               v-if="store.createdTasks.length == 0"
             >
               No Tasks Here Yet
@@ -179,66 +187,65 @@ onMounted(() => {
                   class="magicIcon"
                 ></v-icon>
               </v-card-title>
-              <TransitionGroup name="fade" tag="v-row" class="w-100">
-                <v-fade-transition
-                  group
-                  tag="v-row"
-                  class="w-100 d-flex justify-center flex-wrap align-center"
-                  key="task"
+              <TransitionGroup
+                name="slide-fade"
+                tag="v-row"
+                class="w-100 d-flex justify-center flex-wrap align-center"
+                key="1"
+              >
+                <v-col
+                  class="bg-darkBlue mb-2 rounded-pill"
+                  cols="12"
+                  v-for="task in store.createdTasks"
+                  :key="task.task_Name"
                 >
-                  <v-col
-                    class="bg-darkBlue mb-2 w-100 rounded-pill"
-                    cols="9"
-                    v-for="(task, index) in store.createdTasks"
-                    :key="index"
-                  >
-                    <v-row>
-                      <v-col
-                        cols="7"
-                        class="text-left d-flex justify-start align-center"
+                  <v-row>
+                    <v-col
+                      cols="6"
+                      class="text-left d-flex justify-start align-center"
+                    >
+                      <p class="px-3">{{ task.task_Name }}</p>
+                    </v-col>
+                    <v-col cols="6">
+                      <div
+                        class="d-flex justify-end align-center flex-nowrap w-100"
                       >
-                        <p class="px-3">{{ task.task_Name }}</p>
-                      </v-col>
-                      <v-col cols="5">
-                        <div
-                          class="d-flex justify-end align-center flex-wrap w-100"
-                        >
-                          <v-btn
-                            class="ma-1"
-                            size="small"
-                            color="blue"
-                            icon="mdi-file-edit"
-                            @click="(dialog = !dialog), putEditName(task)"
-                          ></v-btn>
-                          <v-btn
-                            size="small"
-                            class="px-2 mx-1"
-                            color="red"
-                            icon="mdi-delete"
-                            @click="
-                              store.DeleteTask(task.id, {
-                                id: `${task.id}`,
-                                task_Name: `${task.task_Name}`,
-                              })
-                            "
-                          ></v-btn>
-                          <v-btn
-                            size="small"
-                            class="px-2 mx-1"
-                            color="green"
-                            icon="mdi-check"
-                            @click="
-                              store.finishedTask(task.id, {
-                                id: `${task.id}`,
-                                task_Name: `${task.task_Name}`,
-                              })
-                            "
-                          ></v-btn>
-                        </div>
-                      </v-col>
-                    </v-row>
-                  </v-col>
-                </v-fade-transition>
+                        <v-btn
+                          class="ma-1"
+                          size="small"
+                          color="blue"
+                          icon="mdi-file-edit"
+                          @click="(dialog = !dialog), putEditName(task)"
+                        ></v-btn>
+                        <v-btn
+                          size="small"
+                          class="px-2 mx-1"
+                          color="red"
+                          icon="mdi-delete"
+                          @click="
+                            store.DeleteTask(task.id, {
+                              id: `${task.id}`,
+                              task_Name: `${task.task_Name}`,
+                            })
+                          "
+                        ></v-btn>
+                        <v-btn
+                          size="small"
+                          class="px-2 mx-1"
+                          color="green"
+                          icon="mdi-check"
+                          @click="
+                            store.finishedTask(task.id, {
+                              id: `${task.id}`,
+                              task_Name: `${task.task_Name}`,
+                            })
+                          "
+                        ></v-btn>
+                      </div>
+                    </v-col>
+                  </v-row>
+                </v-col>
+                <!-- </v-fade-transition> -->
               </TransitionGroup>
             </v-row>
           </v-container>
@@ -290,11 +297,26 @@ onMounted(() => {
 <style scoped>
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.5s ease;
+  transition: all 0.5s linear;
 }
 
 .fade-enter-from,
 .fade-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}
+.slide-fade-enter-active {
+  transition: all 0.3s ease-out;
+}
+
+.slide-fade-leave-active {
+  transition: all 0.4s cubic-bezier(1, 0.5, 0.8, 1);
+  position: relative;
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  transform: translateX(20px);
   opacity: 0;
 }
 .magic,

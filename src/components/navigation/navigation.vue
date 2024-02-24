@@ -6,7 +6,7 @@ import DrawerNav from "./drawer.vue";
 const Store = userAuthStore();
 const version = import.meta.env.VITE_APP_VERSION;
 import { useDisplay } from "vuetify";
-const { mdAndDown } = useDisplay();
+const { smAndDown, mdAndUp, mdAndDown } = useDisplay();
 
 const drawer = ref<boolean>();
 if (mdAndDown.value) {
@@ -32,13 +32,18 @@ if (mdAndDown.value) {
         aspect-ratio="16/9"
         crossorigin="use-credentials"
         class="mx-auto"
-        style="height: 56px; width: 200px"
+        style="height: 45px; width: 200px"
         :inline="true"
         :src="LogoSmallPhoto"
       ></v-img>
     </v-app-bar-title>
     <template v-slot:append>
-      <v-chip class="CurrentVersionColor" variant="elevated"
+      <v-chip class="CurrentVersionColor" variant="elevated" v-if="smAndDown"
+        >{{ version }} </v-chip
+      ><v-chip
+        class="CurrentVersionColor"
+        variant="elevated"
+        v-else-if="mdAndUp"
         >Current Version : {{ version }}
       </v-chip>
       <v-btn @click="Store.signOutUser" to="/login" icon="mdi-logout"></v-btn>

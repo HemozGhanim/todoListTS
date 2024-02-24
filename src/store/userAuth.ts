@@ -53,7 +53,7 @@ export const userAuthStore = defineStore("Users", () => {
         const data = res.data;
         console.log(data);
         userDataObj.value = data;
-        $cookies.set("userName", btoa(userDataObj.value.userName));
+        $cookies.set("userName", userDataObj.value.userName);
       })
       .catch(function (err) {
         console.log(err);
@@ -137,12 +137,12 @@ export const userAuthStore = defineStore("Users", () => {
         const data = response.data;
         $cookies.set("jwToken", data.idToken);
         $cookies.set("uid", data.localId);
+        TasksStore.getTasks();
         getUserData();
         heISIn.value = false;
         snackbar.value = true;
         snackBarText.value = "Loggedin Successfuly";
         snackBarColor.value = "success";
-        TasksStore.getTasks();
         router.push("/");
       })
       .catch(function (error) {
